@@ -1,4 +1,5 @@
 using API.Application.Services;
+using API.Application.Interfaces;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +13,8 @@ public static class DependencyInjection
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-
-
+        // Auth
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

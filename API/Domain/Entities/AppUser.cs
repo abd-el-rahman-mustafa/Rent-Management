@@ -23,6 +23,7 @@ public class AppUser : IdentityUser<int>
 
 public enum Gender
 {
+    NotSpecified,
     Male,
     Female
 }
