@@ -16,7 +16,7 @@ public partial class DataContext : IdentityDbContext<AppUser, AppRole, int, Iden
     public DbSet<AppUser> AppUsers { get; set; }
     public DbSet<AppRole> AppRoles { get; set; }
     public DbSet<AppUserRole> AppUserRoles { get; set; }
-    public DbSet<Location> Locations { get; set; }
+    // public DbSet<Location> Locations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
