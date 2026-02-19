@@ -46,30 +46,6 @@ public partial class DataContext : IdentityDbContext<AppUser, AppRole, int, Iden
                  .OnDelete(DeleteBehavior.Cascade);
         });
 
-        // Configure Event
-        builder.Entity<Event>(eventEntity =>
-        {
-            eventEntity.HasOne(e => e.Location)
-                .WithMany()
-                .HasForeignKey("LocationId")
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
-
-            eventEntity.HasMany(e => e.Attendees)
-                .WithOne(ea => ea.Event)
-                .HasForeignKey(ea => ea.EventId)
-                .OnDelete(DeleteBehavior.Cascade);
-        });
-
-        // Configure EventAttendee
-        builder.Entity<EventAttendee>(attendee =>
-        {
-            attendee.HasOne(ea => ea.User)
-                .WithMany()
-                .HasForeignKey(ea => ea.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-        });
-
 
     }
 

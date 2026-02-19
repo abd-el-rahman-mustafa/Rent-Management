@@ -12,18 +12,8 @@ public static class DependencyInjection
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        // Register HttpClient for LocationService
-        services.AddHttpClient<ILocationService, LocationService>()
-            .ConfigureHttpClient(client =>
-            {
-                client.Timeout = TimeSpan.FromSeconds(10);
-            });
 
-        // Register application services
-        services.AddScoped<IEventService, EventService>();
 
-        // Configure AutoMapper
-        services.AddAutoMapper(typeof(EventMappingProfile));
 
         return services;
     }
