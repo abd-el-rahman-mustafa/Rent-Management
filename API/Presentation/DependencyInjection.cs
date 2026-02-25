@@ -15,6 +15,7 @@ public static class DependencyInjection
 
         // Auth
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IOtpService, OtpService>();
 
         return services;
     }
