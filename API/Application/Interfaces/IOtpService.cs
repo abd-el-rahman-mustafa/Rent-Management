@@ -1,4 +1,3 @@
-using API.Application.DTOs;
 using API.Domain.Entities;
 
 namespace API.Application.Interfaces;

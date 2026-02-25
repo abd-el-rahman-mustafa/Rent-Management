@@ -12,7 +12,7 @@ public class AuthService : IAuthService
     private readonly IOtpService _otpService;
 
     public AuthService(UserManager<AppUser> userManager, IOtpService otpService)
-    {
+    {   
         _userManager = userManager;
         _otpService = otpService;
     }
@@ -63,7 +63,7 @@ public class AuthService : IAuthService
         // TODO: send the OTP code via email (e.g. SendGrid, SMTP, etc.)
         // Example:
         //   await _emailSender.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
-        _ = code; // suppress unused-variable warning until email sending is implemented
+        // _ = code; // suppress unused-variable warning until email sending is implemented
     }
 
     public async Task ConfirmEmailOtpAsync(VerifyEmailOtpDto dto)
@@ -101,7 +101,7 @@ public class AuthService : IAuthService
         // TODO: send the OTP code via SMS (e.g. Twilio, AWS SNS, etc.)
         // Example:
         //   await _smsSender.SendAsync(dto.PhoneNumber, $"Your verification code is: {code}");
-        _ = code; // suppress unused-variable warning until SMS sending is implemented
+        // _ = code; // suppress unused-variable warning until SMS sending is implemented
     }
 
     public async Task ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto)

@@ -1,6 +1,6 @@
 using API.Domain.Entities;
 
-namespace API.Application.Services;
+namespace API.Application.Interfaces;
 
 public interface ILocationService
 {
