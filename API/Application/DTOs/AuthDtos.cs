@@ -33,6 +33,10 @@ public class RegisterDto
     [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$",
         ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.")]
     public required string Password { get; set; }
+
+    [Required]
+    [Compare("Password", ErrorMessage = "Confirm password does not match.")]
+    public required string ConfirmPassword { get; set; }
 }
 
 public class AuthResponseDto
