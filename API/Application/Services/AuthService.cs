@@ -29,24 +29,22 @@ public class AuthService : IAuthService
 
         if (!emailOtpValid)
             throw new InvalidOperationException("Invalid or expired email OTP code.");
-        // verify phone otp
-        var phoneOtpValid = await _otpService.ValidateOtpAsync(
-            identifier: registerDto.Phone,
-            otpType: OtpType.RegisterPhone,
-            otpCode: registerDto.PhoneOtpCode
-        );
-        if (!phoneOtpValid)
-            throw new InvalidOperationException("Invalid or expired phone OTP code.");
+        // // verify phone otp
+        // var phoneOtpValid = await _otpService.ValidateOtpAsync(
+        //     identifier: registerDto.Phone,
+        //     otpType: OtpType.RegisterPhone,
+        //     otpCode: registerDto.PhoneOtpCode
+        // );
+        // if (!phoneOtpValid)
+        //     throw new InvalidOperationException("Invalid or expired phone OTP code.");
 
         // verify that email is unique (not already taken by another user)
         if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
             throw new InvalidOperationException("An account with that email address already exists.");
 
-        // verify that phone number is unique (not already taken by another user)
-        if (await _userManager.Users.AnyAsync(u => u.PhoneNumber == registerDto.Phone))
-            throw new InvalidOperationException("An account with that phone number already exists.");
-
-
+        // // verify that phone number is unique (not already taken by another user)
+        // if (await _userManager.Users.AnyAsync(u => u.PhoneNumber == registerDto.Phone))
+        //     throw new InvalidOperationException("An account with that phone number already exists.");
 
         var user = new AppUser
         {
@@ -54,13 +52,11 @@ public class AuthService : IAuthService
             LastName = registerDto.LastName,
             Email = registerDto.Email,
             UserName = registerDto.Email,
-            PhoneNumber = registerDto.Phone,
+            // PhoneNumber = registerDto.Phone,
             Gender = Gender.NotSpecified,
             CreatedAt = DateTimeOffset.UtcNow,
             UpdatedAt = DateTimeOffset.UtcNow,
         };
-
-
 
 
         var result = await _userManager.CreateAsync(user, registerDto.Password);
