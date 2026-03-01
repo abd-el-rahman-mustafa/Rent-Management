@@ -83,8 +83,12 @@ public class AuthService : IAuthService
 
     public async Task SendEmailOtpAsync(SendEmailOtpDto dto, OtpType otpType)
     {
-        var user = await _userManager.FindByEmailAsync(dto.Email)
-            ?? throw new InvalidOperationException("No account found with that email address.");
+        // if otp for registration, don't verify that email exists because user might be in the process of registering and hasn't received the OTP yet
+        if (otpType != OtpType.RegisterEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email)
+                ?? throw new InvalidOperationException("No account found with that email address.");
+        }
 
         var code = await _otpService.GenerateOtpAsync(dto.Email, otpType);
 
