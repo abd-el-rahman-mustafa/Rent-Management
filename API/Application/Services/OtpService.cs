@@ -9,6 +9,7 @@ namespace API.Application.Services;
 public class OtpService : IOtpService
 {
     private static readonly TimeSpan OtpValidity = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan SignupOtpValidity = TimeSpan.FromMinutes(3);
 
     private readonly DataContext _context;
 
@@ -18,11 +19,11 @@ public class OtpService : IOtpService
     }
 
     /// <inheritdoc/>
-    public async Task<string> GenerateOtpAsync(int userId, OtpType type)
+    public async Task<string> GenerateOtpAsync(string identifier, OtpType type)
     {
         // Invalidate any existing unconsumed OTPs of the same type for this user
         var existing = await _context.OtpRecords
-            .Where(o => o.UserId == userId && o.Type == type && !o.IsConsumed)
+            .Where(o => o.Identifier == identifier && o.Type == type && !o.IsConsumed)
             .ToListAsync();
 
         foreach (var old in existing)
@@ -33,11 +34,11 @@ public class OtpService : IOtpService
 
         var record = new OtpRecord
         {
-            UserId = userId,
+            Identifier = identifier,
             Type = type,
             Code = code,
             CreatedAt = DateTimeOffset.UtcNow,
-            ExpiresAt = DateTimeOffset.UtcNow.Add(OtpValidity),
+            ExpiresAt = DateTimeOffset.UtcNow.Add(type == OtpType.RegisterEmail || type == OtpType.RegisterPhone ? SignupOtpValidity : OtpValidity),
         };
 
         _context.OtpRecords.Add(record);
@@ -47,10 +48,10 @@ public class OtpService : IOtpService
     }
 
     /// <inheritdoc/>
-    public async Task<bool> ValidateOtpAsync(int userId, OtpType type, string code)
+    public async Task<bool> ValidateOtpAsync(string identifier, OtpType type, string code)
     {
         var record = await _context.OtpRecords
-            .Where(o => o.UserId == userId
+            .Where(o => o.Identifier == identifier
                      && o.Type == type
                      && !o.IsConsumed
                      && o.Code == code)
