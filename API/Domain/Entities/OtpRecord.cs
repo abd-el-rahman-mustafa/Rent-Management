@@ -5,8 +5,7 @@ public class OtpRecord
     public int Id { get; set; }
 
     /// <summary>The user this OTP belongs to.</summary>
-    public int UserId { get; set; }
-    public AppUser User { get; set; } = null!;
+    public required string Identifier { get; set; }
 
     /// <summary>The 6-digit OTP code.</summary>
     public required string Code { get; set; }
@@ -17,7 +16,7 @@ public class OtpRecord
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
     /// <summary>OTP expires after a short window (e.g. 10 minutes).</summary>
-    public DateTimeOffset ExpiresAt { get; set; }
+    public required DateTimeOffset ExpiresAt { get; set; }
 
     /// <summary>True once the user has successfully verified with this code.</summary>
     public bool IsConsumed { get; set; } = false;
@@ -25,6 +24,12 @@ public class OtpRecord
 
 public enum OtpType
 {
-    Email,
-    Phone
+    RegisterEmail,
+    RegisterPhone,
+    ResetPasswordEmail,
+    ResetPasswordPhone,
+    LoginEmail,
+    LoginPhone,
+
+    // add more types as needed (e.g. 2FA, etc.)
 }
