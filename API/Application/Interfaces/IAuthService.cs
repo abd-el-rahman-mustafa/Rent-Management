@@ -1,4 +1,5 @@
 using API.Application.DTOs;
+using API.Domain.Entities;
 
 namespace API.Application.Interfaces;
 
@@ -14,23 +15,23 @@ public interface IAuthService
     /// Generates an OTP code and sends it to the user's email address.
     /// TODO: implement actual email delivery.
     /// </summary>
-    Task SendEmailOtpAsync(SendEmailOtpDto dto);
+    Task SendEmailOtpAsync(SendEmailOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Validates the OTP code the user received via email.
     /// Marks EmailConfirmed = true on the Identity user if valid.
     /// </summary>
-    Task ConfirmEmailOtpAsync(VerifyEmailOtpDto dto);
+    Task ConfirmEmailOtpAsync(VerifyEmailOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Generates an OTP code and sends it to the user's phone number via SMS.
     /// TODO: implement actual SMS delivery.
     /// </summary>
-    Task SendPhoneOtpAsync(SendPhoneOtpDto dto);
+    Task SendPhoneOtpAsync(SendPhoneOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Validates the OTP code the user received via SMS.
     /// Marks PhoneNumberConfirmed = true on the Identity user if valid.
     /// </summary>
-    Task ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto);
+    Task ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto , OtpType otpType);
 }

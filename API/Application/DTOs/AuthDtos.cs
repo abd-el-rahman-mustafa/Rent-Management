@@ -17,8 +17,16 @@ public class RegisterDto
     public required string Email { get; set; }
 
     [Required]
+    [StringLength(6, MinimumLength = 6, ErrorMessage = "Email OTP must be exactly 6 digits.")]
+    public required string EmailOtpCode { get; set; }
+
+    [Required]
     [Phone]
     public required string Phone { get; set; }
+
+    [Required]
+    [StringLength(6, MinimumLength = 6, ErrorMessage = "Phone OTP must be exactly 6 digits.")]
+    public required string PhoneOtpCode { get; set; }
 
     [Required]
     [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
