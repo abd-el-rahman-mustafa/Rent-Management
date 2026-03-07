@@ -1,10 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Input } from '../../../shared/components/input/input';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Input],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -29,7 +30,7 @@ export class Register implements OnDestroy {
       this.registerForm.get('email')?.valid
     ) {
       this.otpSent = true;
-      
+
       // Add required validators for OTP and password fields once OTP is sent
       this.registerForm.get('otp')?.setValidators([Validators.required]);
       this.registerForm.get('otp')?.updateValueAndValidity();
