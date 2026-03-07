@@ -9,45 +9,18 @@
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <app-input
-              label="First Name"
-              type="text"
-              formControlName="firstName"
-              [error]="
-                registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched
-                  ? 'First name is required'
-                  : ''
-              "
-            >
+            <app-input label="First Name" type="text" formControlName="firstName">
             </app-input>
           </div>
 
           <div>
-            <app-input
-              label="Last Name"
-              type="text"
-              formControlName="lastName"
-              [error]="
-                registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched
-                  ? 'Last name is required'
-                  : ''
-              "
-            >
+            <app-input label="Last Name" type="text" formControlName="lastName">
             </app-input>
           </div>
         </div>
 
         <div>
-          <app-input
-            label="Email Address"
-            type="email"
-            formControlName="email"
-            [error]="
-              registerForm.get('email')?.invalid && registerForm.get('email')?.touched
-                ? 'Valid email is required'
-                : ''
-            "
-          >
+          <app-input label="Email Address" type="email" formControlName="email">
           </app-input>
         </div>
 
@@ -56,54 +29,23 @@
             <div>
               <div class="flex justify-between items-center mb-1">
                 <label for="otp" class="block text-sm font-medium text-gray-700">OTP Code</label>
-                <span
-                  class="text-xs font-bold px-2 py-1 rounded-full"
-                  [ngClass]="
+                <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
                     countdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-                  "
-                >
+                  ">
                   {{ formatTime }}
                 </span>
               </div>
-              <app-input
-                type="text"
-                formControlName="otp"
-                placeholder="Enter the OTP sent to your email"
-                [error]="
-                  registerForm.get('otp')?.invalid && registerForm.get('otp')?.touched
-                    ? 'OTP is required'
-                    : ''
-                "
-              >
+              <app-input type="text" formControlName="otp" placeholder="Enter the OTP sent to your email">
               </app-input>
             </div>
 
             <div>
-              <app-input
-                label="Password"
-                type="password"
-                formControlName="password"
-                [error]="
-                  registerForm.get('password')?.invalid && registerForm.get('password')?.touched
-                    ? 'Password is required'
-                    : ''
-                "
-              >
+              <app-input label="Password" type="password" formControlName="password">
               </app-input>
             </div>
 
             <div>
-              <app-input
-                label="Confirm Password"
-                type="password"
-                formControlName="confirmPassword"
-                [error]="
-                  registerForm.get('confirmPassword')?.invalid &&
-                  registerForm.get('confirmPassword')?.touched
-                    ? 'Confirm Password is required'
-                    : ''
-                "
-              >
+              <app-input label="Confirm Password" type="password" formControlName="confirmPassword">
               </app-input>
             </div>
           </div>
@@ -111,23 +53,14 @@
       </div>
 
       <div>
-        <button
-          *ngIf="!otpSent"
-          type="button"
-          (click)="sendOtp()"
-          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
-        >
+        <button *ngIf="!otpSent" type="button" (click)="sendOtp()"
+          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
           Send OTP
         </button>
 
-        <button
-          *ngIf="otpSent"
-          type="submit"
-          [disabled]="countdown <= 0 || registerForm.invalid"
-          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-        >
-          {{ countdown <= 0 ? 'OTP Expired' : 'Complete Registration' }}
-        </button>
+        <button *ngIf="otpSent" type="submit" [disabled]="countdown <= 0 || registerForm.invalid"
+          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+          {{ countdown <= 0 ? 'OTP Expired' : 'Complete Registration' }} </button>
       </div>
 
       <div class="text-center mt-4">
