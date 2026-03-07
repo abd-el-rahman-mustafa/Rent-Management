@@ -1,21 +1,15 @@
-import { Component, input, OnDestroy, OnInit, signal, forwardRef } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, signal, forwardRef, Self, computed, Optional } from '@angular/core';
 import { InputType } from '../../interfaces/input.interface';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   imports: [],
   templateUrl: './input.html',
   styleUrl: './input.css',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => Input),
-      multi: true,
-    },
-  ],
+
 })
-export class Input implements OnInit, OnDestroy, ControlValueAccessor {
+export class Input implements ControlValueAccessor {
   // use signals to track input state
   label = input<string>('');
   placeholder = input<string>('');
@@ -25,9 +19,15 @@ export class Input implements OnInit, OnDestroy, ControlValueAccessor {
   value: string = '';
   disabled: boolean = false;
 
-  ngOnInit(): void { }
+  constructor(@Self() @Optional() public ngControl: NgControl) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
 
-  onChange: (value: string) => void = () => { };
+  onChange: (value: string) => void = () => {
+
+  };
   onTouched: () => void = () => { };
 
   handleInput(event: Event): void {
@@ -48,6 +48,7 @@ export class Input implements OnInit, OnDestroy, ControlValueAccessor {
   setDisabledState?(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
-
-  ngOnDestroy(): void { }
+  get isRequired(): boolean {
+    return this.ngControl?.control?.hasValidator?.(Validators.required) ?? false;
+  }
 }
