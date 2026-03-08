@@ -21,7 +21,7 @@ export class Register implements OnDestroy {
   });
 
   otpSent = false;
-  countdown = 180; // 3 minutes
+  otpCountdown = 180; // 3 minutes
   intervalId: any;
 
   sendOtp() {
@@ -50,22 +50,16 @@ export class Register implements OnDestroy {
   }
 
   startCountdown() {
-    this.countdown = 180;
+    this.otpCountdown = 180;
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
     this.intervalId = setInterval(() => {
-      this.countdown--;
-      if (this.countdown <= 0) {
+      this.otpCountdown--;
+      if (this.otpCountdown <= 0) {
         clearInterval(this.intervalId);
       }
     }, 1000);
-  }
-
-  get formatTime() {
-    const minutes = Math.floor(this.countdown / 60);
-    const seconds = this.countdown % 60;
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   }
 
   onSubmit() {
