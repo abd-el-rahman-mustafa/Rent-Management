@@ -1,7 +1,7 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
     <div>
-      <h2 class="mt-2 text-center text-3xl font-extrabold text-gray-900">Register</h2>
+      <h2 class="mt-2 text-center text-3xl font-extrabold text-indigo-700">Register</h2>
       <p class="mt-2 text-center text-sm text-gray-600">Create your new account</p>
     </div>
 
@@ -9,18 +9,18 @@
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <app-input label="First Name" type="text" formControlName="firstName" >
+            <app-input label="First Name" type="text" formControlName="firstName">
             </app-input>
           </div>
 
           <div>
-            <app-input label="Last Name" type="text" formControlName="lastName" >
+            <app-input label="Last Name" type="text" formControlName="lastName">
             </app-input>
           </div>
         </div>
 
         <div>
-          <app-input label="Email Address" type="email" formControlName="email" >
+          <app-input label="Email Address" type="email" formControlName="email">
           </app-input>
         </div>
 
@@ -30,11 +30,19 @@
             <div class="flex justify-between items-center mb-1">
               <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">OTP Code <span
                   class="text-red-500">*</span></label>
+              @if(otpCountdown > 0){
+
               <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
                     otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-                  ">
+                    ">
                 {{ otpCountdown | countdown }}
               </span>
+              }@else {
+              <button type="button" (click)="sendOtp()"
+                class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-500 cursor-pointer hover:text-indigo-700">
+                Send OTP Again
+              </button>
+              }
             </div>
             <app-input type="number" formControlName="emailOtpCode" placeholder="Enter the OTP sent to your email">
             </app-input>

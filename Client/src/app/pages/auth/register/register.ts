@@ -54,7 +54,7 @@ export class Register implements OnInit, OnDestroy {
       this.registerForm.get('emailOtpCode')?.updateValueAndValidity();
       this.registerForm.get('password')?.setValidators([Validators.required, passwordValidator]);
       this.registerForm.get('password')?.updateValueAndValidity();
-      this.registerForm.get('confirmPassword')?.setValidators([Validators.required, passwordValidator, ]);
+      this.registerForm.get('confirmPassword')?.setValidators([Validators.required, passwordValidator]);
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
 
       this.startCountdown();
