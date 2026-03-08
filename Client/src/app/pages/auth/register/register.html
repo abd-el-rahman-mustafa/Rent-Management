@@ -28,14 +28,14 @@
         <div class="p-4 bg-gray-50 border rounded-lg space-y-4">
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label for="otp" class="block text-sm font-medium text-gray-700">OTP Code</label>
+              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">OTP Code</label>
               <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
                     otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
                   ">
                 {{ otpCountdown | countdown }}
               </span>
             </div>
-            <app-input type="text" formControlName="otp" placeholder="Enter the OTP sent to your email">
+            <app-input type="text" formControlName="emailOtpCode" placeholder="Enter the OTP sent to your email">
             </app-input>
           </div>
 

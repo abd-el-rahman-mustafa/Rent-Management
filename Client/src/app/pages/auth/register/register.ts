@@ -1,29 +1,45 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Input } from '../../../shared/components/input/input';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
+import { AuthService } from '../auth.service';
+import { RegisterDto } from '../auth.interface';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, Input,Countdown],
+  imports: [CommonModule, ReactiveFormsModule, Input, Countdown],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register implements OnDestroy {
-  registerForm = new FormGroup({
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    otp: new FormControl(''),
-    password: new FormControl(''),
-    confirmPassword: new FormControl(''),
-  });
+export class Register implements OnInit, OnDestroy {
+  registerForm: FormGroup = new FormGroup({});
 
   otpSent = false;
   otpCountdown = 180; // 3 minutes
   intervalId: any;
 
+
+  /**
+   *
+   */
+  constructor(private authService: AuthService, private fb: FormBuilder,) {
+
+  }
+
+  ngOnInit(): void {
+    this.initializeForm();
+  }
+  initializeForm() {
+    this.registerForm = this.fb.nonNullable.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      emailOtpCode: [''],
+      password: [''],
+      confirmPassword: ['']
+    });
+  }
   sendOtp() {
     if (
       this.registerForm.get('firstName')?.valid &&
@@ -33,8 +49,8 @@ export class Register implements OnDestroy {
       this.otpSent = true;
 
       // Add required validators for OTP and password fields once OTP is sent
-      this.registerForm.get('otp')?.setValidators([Validators.required]);
-      this.registerForm.get('otp')?.updateValueAndValidity();
+      this.registerForm.get('emailOtpCode')?.setValidators([Validators.required]);
+      this.registerForm.get('emailOtpCode')?.updateValueAndValidity();
       this.registerForm.get('password')?.setValidators([Validators.required]);
       this.registerForm.get('password')?.updateValueAndValidity();
       this.registerForm.get('confirmPassword')?.setValidators([Validators.required]);
@@ -65,7 +81,19 @@ export class Register implements OnDestroy {
   onSubmit() {
     if (this.registerForm.valid) {
       console.log('Form Submitted successfully:', this.registerForm.value);
-      // Here you would typically call your authentication service
+      const registerDto: RegisterDto = {
+        ...this.registerForm.value
+      };
+
+      console.log('Register DTO:', registerDto);
+      // this.authService.register(registerDto).subscribe({
+      //   next: (response) => {
+      //     console.log('Registration successful:', response);
+      //   },
+      //   error: (error) => {
+      //     console.error('Registration failed:', error);
+      //   }
+      // });
     } else {
       this.registerForm.markAllAsTouched();
     }
