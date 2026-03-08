@@ -2,10 +2,11 @@ import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Input } from '../../../shared/components/input/input';
+import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, Input],
+  imports: [CommonModule, ReactiveFormsModule, Input,Countdown],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
