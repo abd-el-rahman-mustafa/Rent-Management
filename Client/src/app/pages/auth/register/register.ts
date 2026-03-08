@@ -5,6 +5,7 @@ import { Input } from '../../../shared/components/input/input';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { AuthService } from '../auth.service';
 import { RegisterDto } from '../auth.interface';
+import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +37,7 @@ export class Register implements OnInit, OnDestroy {
       lastName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       emailOtpCode: [''],
-      password: [''],
+      password: ['', []],
       confirmPassword: ['']
     });
   }
@@ -49,11 +50,11 @@ export class Register implements OnInit, OnDestroy {
       this.otpSent = true;
 
       // Add required validators for OTP and password fields once OTP is sent
-      this.registerForm.get('emailOtpCode')?.setValidators([Validators.required]);
+      this.registerForm.get('emailOtpCode')?.setValidators([Validators.required, otpValidator]);
       this.registerForm.get('emailOtpCode')?.updateValueAndValidity();
-      this.registerForm.get('password')?.setValidators([Validators.required]);
+      this.registerForm.get('password')?.setValidators([Validators.required, passwordValidator]);
       this.registerForm.get('password')?.updateValueAndValidity();
-      this.registerForm.get('confirmPassword')?.setValidators([Validators.required]);
+      this.registerForm.get('confirmPassword')?.setValidators([Validators.required, passwordValidator, ]);
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
 
       this.startCountdown();

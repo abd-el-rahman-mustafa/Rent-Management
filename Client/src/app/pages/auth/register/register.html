@@ -9,18 +9,18 @@
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <app-input label="First Name" type="text" formControlName="firstName">
+            <app-input label="First Name" type="text" formControlName="firstName" >
             </app-input>
           </div>
 
           <div>
-            <app-input label="Last Name" type="text" formControlName="lastName">
+            <app-input label="Last Name" type="text" formControlName="lastName" >
             </app-input>
           </div>
         </div>
 
         <div>
-          <app-input label="Email Address" type="email" formControlName="email">
+          <app-input label="Email Address" type="email" formControlName="email" >
           </app-input>
         </div>
 
@@ -28,14 +28,15 @@
         <div class="p-4 bg-gray-50 border rounded-lg space-y-4">
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">OTP Code</label>
+              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">OTP Code <span
+                  class="text-red-500">*</span></label>
               <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
                     otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
                   ">
                 {{ otpCountdown | countdown }}
               </span>
             </div>
-            <app-input type="text" formControlName="emailOtpCode" placeholder="Enter the OTP sent to your email">
+            <app-input type="number" formControlName="emailOtpCode" placeholder="Enter the OTP sent to your email">
             </app-input>
           </div>
 
