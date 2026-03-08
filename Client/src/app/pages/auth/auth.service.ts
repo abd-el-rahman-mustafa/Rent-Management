@@ -13,6 +13,10 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
+  sendOtp(email: string) {
+    return this.http.post(`${environment.API_URL}auth/send-email-otp`, { email });
+  }
+
   register(registerDtor: RegisterDto) {
     return this.http.post(`${environment.API_URL}auth/register`, registerDtor);
   }

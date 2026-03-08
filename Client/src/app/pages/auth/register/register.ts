@@ -58,6 +58,15 @@ export class Register implements OnInit, OnDestroy {
       this.registerForm.get('confirmPassword')?.updateValueAndValidity();
 
       this.startCountdown();
+
+      this.authService.sendOtp(this.registerForm.get('email')?.value).subscribe({
+        next: (response) => {
+          console.log('OTP sent successfully:', response);
+        },
+        error: (error) => {
+          console.error('Failed to send OTP:', error);
+        }
+      });
     } else {
       // Mark fields as touched to show validation errors for initial fields
       this.registerForm.get('firstName')?.markAsTouched();
@@ -86,15 +95,14 @@ export class Register implements OnInit, OnDestroy {
         ...this.registerForm.value
       };
 
-      console.log('Register DTO:', registerDto);
-      // this.authService.register(registerDto).subscribe({
-      //   next: (response) => {
-      //     console.log('Registration successful:', response);
-      //   },
-      //   error: (error) => {
-      //     console.error('Registration failed:', error);
-      //   }
-      // });
+      this.authService.register(registerDto).subscribe({
+        next: (response) => {
+          console.log('Registration successful:', response);
+        },
+        error: (error) => {
+          console.error('Registration failed:', error);
+        }
+      });
     } else {
       this.registerForm.markAllAsTouched();
     }
