@@ -12,6 +12,10 @@
   [type]="type()" [placeholder]="placeholder()" [value]="value" [disabled]="disabled" (input)="handleInput($event)"
   (blur)="onTouched()" />
 
-@if (error()) {
-<p class="mt-1.5 text-xs text-red-500">{{ error() }}</p>
+@if (control.errors && control.touched) {
+<div class="text-red-500 mt-1.5 text-xs">
+  @for (error of control.errors | keyvalue; track error.key) {
+  <p>{{ getErrorMessage(error.key, error.value) }}</p>
+  }
+</div>
 }
