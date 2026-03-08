@@ -10,11 +10,13 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IOtpService _otpService;
+    private readonly IEmailService emailService;
 
-    public AuthService(UserManager<AppUser> userManager, IOtpService otpService)
+    public AuthService(UserManager<AppUser> userManager, IOtpService otpService, IEmailService emailService)
     {
         _userManager = userManager;
         _otpService = otpService;
+        this.emailService = emailService;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
@@ -92,7 +94,7 @@ public class AuthService : IAuthService
 
         var code = await _otpService.GenerateOtpAsync(dto.Email, otpType);
 
-        // TODO: send the OTP code via email (e.g. SendGrid, SMTP, etc.)
+        await emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
         // Example:
         //   await _emailSender.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
         // _ = code; // suppress unused-variable warning until email sending is implemented

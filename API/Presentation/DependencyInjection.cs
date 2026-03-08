@@ -13,9 +13,13 @@ public static class DependencyInjection
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-        // Auth
+        // Configure email settings
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        
+        // Service registrations
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IOtpService, OtpService>();
+        services.AddScoped<IEmailService, EmailService>();
 
         return services;
     }
