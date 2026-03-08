@@ -12,7 +12,19 @@ builder.Services.AddControllers();
 // Register application services via extension method
 builder.Services.AddApplicationServices(builder.Configuration);
 
-
+// cors
+// cors
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .WithOrigins(builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()!);
+    });
+});
 
 builder.Services.AddDataProtection();
 
@@ -44,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("CorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
