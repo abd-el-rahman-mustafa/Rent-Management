@@ -38,7 +38,7 @@ public class OtpService : IOtpService
             Type = type,
             Code = code,
             CreatedAt = DateTimeOffset.UtcNow,
-            ExpiresAt = DateTimeOffset.UtcNow.Add(type == OtpType.RegisterEmail || type == OtpType.RegisterPhone ? SignupOtpValidity : OtpValidity),
+            ExpiresAt = DateTimeOffset.UtcNow.Add(type == OtpType.RegisterEmail  ? SignupOtpValidity : OtpValidity),
         };
 
         _context.OtpRecords.Add(record);

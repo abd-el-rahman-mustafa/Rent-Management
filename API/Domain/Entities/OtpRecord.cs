@@ -25,7 +25,6 @@ public class OtpRecord
 public enum OtpType
 {
     RegisterEmail,
-    RegisterPhone,
     ResetPasswordEmail,
     ResetPasswordPhone,
     LoginEmail,
