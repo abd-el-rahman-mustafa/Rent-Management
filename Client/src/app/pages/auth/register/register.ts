@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Input } from '../../../shared/components/input/input';
@@ -6,6 +6,7 @@ import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { AuthService } from '../auth.service';
 import { RegisterDto } from '../auth.interface';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,7 @@ export class Register implements OnInit, OnDestroy {
   otpCountdown = 180; // 3 minutes
   intervalId: any;
 
-
+  toastr = inject(ToastrService);
   /**
    *
    */
@@ -60,11 +61,11 @@ export class Register implements OnInit, OnDestroy {
       this.startCountdown();
 
       this.authService.sendOtp(this.registerForm.get('email')?.value).subscribe({
-        next: (response) => {
-          console.log('OTP sent successfully:', response);
+        next: (res: any) => {
+          this.toastr.success(res.message, 'Success');
         },
         error: (error) => {
-          console.error('Failed to send OTP:', error);
+          this.toastr.error('An error occurred while sending OTP. Please try again.', 'Error');
         }
       });
     } else {
