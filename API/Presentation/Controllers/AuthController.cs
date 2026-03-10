@@ -22,11 +22,14 @@ public class AuthController : ControllerBase
         try
         {
             var authResponse = await _authService.RegisterAsync(registerDto);
-            return Ok(authResponse);
+            return authResponse.IsSuccess
+                    ? Ok(authResponse)
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.Status);
+
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(new { error = ex.Message });
+            return Problem(detail: ex.Message, statusCode: 400);
         }
     }
 
@@ -36,28 +39,31 @@ public class AuthController : ControllerBase
     {
         try
         {
-            await _authService.SendEmailOtpAsync(dto, OtpType.RegisterEmail);
-            return Ok(new { message = "OTP code sent to email." });
+           var result =  await _authService.SendEmailOtpAsync(dto, OtpType.RegisterEmail);
+            return result.IsSuccess
+                    ? Ok(result)
+                    : Problem(detail: result.Details, statusCode: result.Status);
         }
         catch (InvalidOperationException ex)
         {
-            return BadRequest(new { error = ex.Message });
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError   );
         }
     }
 
     // Phone OTP
-    [HttpPost("send-phone-otp")]
-    public async Task<IActionResult> SendPhoneOtp([FromBody] SendPhoneOtpDto dto)
-    {
-        try
-        {
-            await _authService.SendPhoneOtpAsync(dto, OtpType.RegisterPhone);
-            return Ok(new { message = "OTP code sent to phone." });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { error = ex.Message });
-        }
-    }
+    // TODO: re-enable phone OTP endpoints once phone verification is implemented in the registration flow or as a separate feature.
+    // [HttpPost("send-phone-otp")]
+    // public async Task<IActionResult> SendPhoneOtp([FromBody] SendPhoneOtpDto dto)
+    // {
+    //     try
+    //     {
+    //         await _authService.SendPhoneOtpAsync(dto, OtpType.RegisterPhone // or OtpType.ResetPasswordPhone, depending on the use case);
+    //         return Ok(new { message = "OTP code sent to phone." });
+    //     }
+    //     catch (InvalidOperationException ex)
+    //     {
+    //         return BadRequest(new { error = ex.Message });
+    //     }
+    // }
 
 }

@@ -45,7 +45,7 @@ public class AuthResponseDto
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Email { get; set; }
-    public required string Phone { get; set; }
+    public  string? Phone { get; set; }
 }
 
 /// <summary>Used to request sending an OTP to the user's email.</summary>

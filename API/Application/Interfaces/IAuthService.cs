@@ -1,3 +1,4 @@
+using API.Application.Common;
 using API.Application.DTOs;
 using API.Domain.Entities;
 
@@ -9,29 +10,29 @@ public interface IAuthService
     /// Registers a new user with the provided details.
     /// Returns the created user's info on success, or throws on failure.
     /// </summary>
-    Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto);
+    Task<ServiceResult<AuthResponseDto>> RegisterAsync(RegisterDto registerDto);
 
     /// <summary>
     /// Generates an OTP code and sends it to the user's email address.
     /// TODO: implement actual email delivery.
     /// </summary>
-    Task SendEmailOtpAsync(SendEmailOtpDto dto , OtpType otpType);
+    Task<ServiceResult<bool>> SendEmailOtpAsync(SendEmailOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Validates the OTP code the user received via email.
     /// Marks EmailConfirmed = true on the Identity user if valid.
     /// </summary>
-    Task ConfirmEmailOtpAsync(VerifyEmailOtpDto dto , OtpType otpType);
+    Task<ServiceResult<bool>> ConfirmEmailOtpAsync(VerifyEmailOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Generates an OTP code and sends it to the user's phone number via SMS.
     /// TODO: implement actual SMS delivery.
     /// </summary>
-    Task SendPhoneOtpAsync(SendPhoneOtpDto dto , OtpType otpType);
+    Task<ServiceResult<bool>> SendPhoneOtpAsync(SendPhoneOtpDto dto , OtpType otpType);
 
     /// <summary>
     /// Validates the OTP code the user received via SMS.
     /// Marks PhoneNumberConfirmed = true on the Identity user if valid.
     /// </summary>
-    Task ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto , OtpType otpType);
+    Task<ServiceResult<bool>> ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto , OtpType otpType);
 }

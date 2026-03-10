@@ -3,6 +3,7 @@ using API.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using API.Application.Interfaces;
+using API.Application.Common;
 
 namespace API.Application.Services;
 
@@ -19,7 +20,7 @@ public class AuthService : IAuthService
         this.emailService = emailService;
     }
 
-    public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
+    public async Task<ServiceResult<AuthResponseDto>> RegisterAsync(RegisterDto registerDto)
     {
 
         // verify email otp
@@ -61,53 +62,78 @@ public class AuthService : IAuthService
         };
 
 
-        var result = await _userManager.CreateAsync(user, registerDto.Password);
+        var createUserResult = await _userManager.CreateAsync(user, registerDto.Password);
 
-        if (!result.Succeeded)
+        if (!createUserResult.Succeeded)
         {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+            var errors = string.Join(", ", createUserResult.Errors.Select(e => e.Description));
             throw new InvalidOperationException($"Registration failed: {errors}");
         }
 
-        return new AuthResponseDto
+        var result = new AuthResponseDto
         {
             Id = user.Id,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Email = user.Email!,
-            Phone = user.PhoneNumber!,
+            Email = user.Email,
         };
+
+        return ServiceResult<AuthResponseDto>.Success(
+            data: result,
+            title: "Registration successful",
+            details: "Your account has been created successfully."
+        );
     }
 
     // -------------------------------------------------------------------------
     // Email OTP
     // -------------------------------------------------------------------------
 
-    public async Task SendEmailOtpAsync(SendEmailOtpDto dto, OtpType otpType)
+    public async Task<ServiceResult<bool>> SendEmailOtpAsync(SendEmailOtpDto dto, OtpType otpType)
     {
         // if otp for registration, don't verify that email exists because user might be in the process of registering and hasn't received the OTP yet
         if (otpType != OtpType.RegisterEmail)
         {
-            var user = await _userManager.FindByEmailAsync(dto.Email)
-                ?? throw new InvalidOperationException("No account found with that email address.");
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (user == null)
+                return ServiceResult<bool>.Failure(
+                     title: "Email Not Found",
+                     details: "No account found with that email address.",
+                     statusCode: StatusCodes.Status404NotFound
+                 );
+
         }
 
         var code = await _otpService.GenerateOtpAsync(dto.Email, otpType);
 
         await emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
-        // Example:
-        //   await _emailSender.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
-        // _ = code; // suppress unused-variable warning until email sending is implemented
+
+        return ServiceResult<bool>.Success(
+            data: true,
+            title: "OTP Sent",
+            details: "OTP code has been sent to the provided email address."
+        );
     }
 
-    public async Task ConfirmEmailOtpAsync(VerifyEmailOtpDto dto, OtpType otpType)
+    public async Task<ServiceResult<bool>> ConfirmEmailOtpAsync(VerifyEmailOtpDto dto, OtpType otpType)
     {
-        var user = await _userManager.FindByEmailAsync(dto.Email)
-            ?? throw new InvalidOperationException("No account found with that email address.");
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user == null)
+            return ServiceResult<bool>.Failure(
+                title: "Email Not Found",
+                details: "No account found with that email address.",
+                statusCode: StatusCodes.Status404NotFound
+            );
+
 
         var valid = await _otpService.ValidateOtpAsync(dto.Email, otpType, dto.OtpCode);
         if (!valid)
-            throw new InvalidOperationException("Invalid or expired OTP code.");
+            return ServiceResult<bool>.Failure(
+                title: "Invalid OTP",
+                details: "The provided OTP code is invalid or has expired.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
 
         // Mark the email as confirmed in ASP.NET Identity
         var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -116,37 +142,67 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Email confirmation failed: {errors}");
+
+            return ServiceResult<bool>.Failure(
+                title: "Email Confirmation Failed",
+                details: $"Failed to confirm email: {errors}",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
         }
+
+        return ServiceResult<bool>.Success(
+            data: true,
+            title: "Email Confirmed",
+            details: "Your email has been confirmed successfully."
+        );
     }
 
     // -------------------------------------------------------------------------
     // Phone OTP
     // -------------------------------------------------------------------------
 
-    public async Task SendPhoneOtpAsync(SendPhoneOtpDto dto, OtpType otpType)
+    public async Task<ServiceResult<bool>> SendPhoneOtpAsync(SendPhoneOtpDto dto, OtpType otpType)
     {
         var user = await _userManager.Users
-                       .FirstOrDefaultAsync(u => u.PhoneNumber == dto.PhoneNumber)
-                   ?? throw new InvalidOperationException("No account found with that phone number.");
+                       .FirstOrDefaultAsync(u => u.PhoneNumber == dto.PhoneNumber);
+
+        if (user == null)
+            return ServiceResult<bool>.Failure(
+                 title: "Phone Number Not Found",
+                 details: "No account found with that phone number.",
+                 statusCode: StatusCodes.Status404NotFound
+             );
+
 
         var code = await _otpService.GenerateOtpAsync(dto.PhoneNumber, otpType);
 
-        // TODO: send the OTP code via SMS (e.g. Twilio, AWS SNS, etc.)
-        // Example:
-        //   await _smsSender.SendAsync(dto.PhoneNumber, $"Your verification code is: {code}");
-        // _ = code; // suppress unused-variable warning until SMS sending is implemented
+        return ServiceResult<bool>.Success(
+            data: true,
+            title: "OTP Sent",
+            details: "OTP code has been sent to the provided phone number."
+        );
     }
 
-    public async Task ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto, OtpType otpType)
+    public async Task<ServiceResult<bool>> ConfirmPhoneOtpAsync(VerifyPhoneOtpDto dto, OtpType otpType)
     {
         var user = await _userManager.Users
-                       .FirstOrDefaultAsync(u => u.PhoneNumber == dto.PhoneNumber)
-                   ?? throw new InvalidOperationException("No account found with that phone number.");
+                       .FirstOrDefaultAsync(u => u.PhoneNumber == dto.PhoneNumber);
+
+        if (user == null)
+            return ServiceResult<bool>.Failure(
+                title: "Phone Number Not Found",
+                details: "No account found with that phone number.",
+                statusCode: StatusCodes.Status404NotFound
+            );
+
 
         var valid = await _otpService.ValidateOtpAsync(dto.PhoneNumber, otpType, dto.OtpCode);
         if (!valid)
-            throw new InvalidOperationException("Invalid or expired OTP code.");
+            return ServiceResult<bool>.Failure(
+                title: "Invalid OTP",
+                details: "The provided OTP code is invalid or has expired.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
 
         // Mark the phone number as confirmed in ASP.NET Identity
         var token = await _userManager.GenerateChangePhoneNumberTokenAsync(user, dto.PhoneNumber);
@@ -155,7 +211,17 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new InvalidOperationException($"Phone confirmation failed: {errors}");
+            return ServiceResult<bool>.Failure(
+                title: "Phone Number Confirmation Failed",
+                details: $"Failed to confirm phone number: {errors}",
+                statusCode: StatusCodes.Status500InternalServerError
+            );
         }
+
+        return ServiceResult<bool>.Success(
+            data: true,
+            title: "Phone Number Confirmed",
+            details: "Your phone number has been confirmed successfully."
+        );
     }
 }
