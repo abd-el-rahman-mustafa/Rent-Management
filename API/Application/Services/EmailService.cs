@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace API.Application.Services;
+
 public interface IEmailService
 {
     Task SendAsync(string toEmail, string subject, string body);
@@ -30,8 +31,13 @@ public class EmailService : IEmailService
         message.Body = new TextPart("html") { Text = body };
 
         using var client = new SmtpClient();
+
+#if DEBUG
+        client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+#endif
+
         await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
-        await client.AuthenticateAsync(_settings.SenderEmail, _settings.Password);
+        await client.AuthenticateAsync(_settings.Username, _settings.Password);
         await client.SendAsync(message);
         await client.DisconnectAsync(true);
     }
@@ -44,4 +50,5 @@ public class EmailSettings
     public string SenderEmail { get; set; }
     public string SenderName { get; set; }
     public string Password { get; set; }
+    public string Username { get; set; }
 }
