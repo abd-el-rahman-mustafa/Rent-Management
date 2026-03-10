@@ -65,7 +65,7 @@ export class Register implements OnInit, OnDestroy {
           this.toastr.success(res.message, 'Success');
         },
         error: (error) => {
-          this.toastr.error('An error occurred while sending OTP. Please try again.', 'Error');
+          // this.toastr.error('An error occurred while sending OTP. Please try again.', 'Error');
         }
       });
     } else {
@@ -101,7 +101,7 @@ export class Register implements OnInit, OnDestroy {
           console.log('Registration successful:', response);
         },
         error: (error) => {
-          console.error('Registration failed:', error);
+          // this.toastr.error(error.error.message, 'Error');
         }
       });
     } else {
