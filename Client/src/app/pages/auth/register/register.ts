@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Input } from '../../../shared/components/input/input';
+import { FormInput } from '../../../shared/components/input/input';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { AuthService } from '../auth.service';
 import { RegisterDto } from '../auth.interface';
@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, Input, Countdown],
+  imports: [CommonModule, ReactiveFormsModule, FormInput, Countdown],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

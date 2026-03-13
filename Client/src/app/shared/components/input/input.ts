@@ -10,7 +10,7 @@ import { KeyValuePipe } from '@angular/common';
   styleUrl: './input.css',
 
 })
-export class Input implements ControlValueAccessor {
+export class FormInput implements ControlValueAccessor {
   // use signals to track input state
   label = input<string>('');
   placeholder = input<string>('');
