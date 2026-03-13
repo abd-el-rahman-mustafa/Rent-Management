@@ -2,7 +2,7 @@ import { Register } from './register/register';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../env/env.dev';
-import { RegisterDto } from './auth.interface';
+import { LoginDto, LoginOtpDto, RegisterDto } from './auth.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +19,14 @@ export class AuthService {
 
   register(registerDtor: RegisterDto) {
     return this.http.post(`${environment.API_URL}auth/register`, registerDtor);
+  }
+
+  login(loginDto: LoginDto) {
+    return this.http.post(`${environment.API_URL}auth/login`, loginDto);
+  }
+
+  verifyLoginOtp(otpDto: LoginOtpDto) {
+    return this.http.post(`${environment.API_URL}auth/verify-login-otp`, otpDto);
   }
 
 

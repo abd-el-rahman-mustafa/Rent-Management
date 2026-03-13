@@ -6,3 +6,13 @@ export interface RegisterDto {
     password: string;
     confirmPassword: string;
 }
+
+export interface LoginDto {
+    email: string;
+    password: string;
+}
+
+export interface LoginOtpDto {
+    email: string;
+    otpCode: string;
+}
