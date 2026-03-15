@@ -18,7 +18,7 @@ export class Login {
   form: FormGroup = new FormGroup({});
 
   otpSent = false;
-  otpCountdown = 180; // 3 minutes
+  otpCountdown = 30; // 30 seconds
   intervalId: any;
 
   toastr = inject(ToastrService);
@@ -43,7 +43,7 @@ export class Login {
   }
 
   startCountdown() {
-    this.otpCountdown = 180;
+    this.otpCountdown = 30;
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
