@@ -13,6 +13,12 @@ public interface IAuthService
     Task<ServiceResult<AuthResponseDto>> RegisterAsync(RegisterDto registerDto);
 
     /// <summary>
+    /// Authenticates a user with email and password.
+    /// Send otp to email if credentials are valid.
+    /// </summary>
+    Task<ServiceResult<string>> LoginAsync(LoginDto loginDto);
+
+    /// <summary>
     /// Generates an OTP code and sends it to the user's email address.
     /// TODO: implement actual email delivery.
     /// </summary>

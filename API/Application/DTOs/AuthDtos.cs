@@ -39,6 +39,16 @@ public class RegisterDto
     public required string ConfirmPassword { get; set; }
 }
 
+public class LoginDto
+{
+    [Required]
+    [EmailAddress]
+    public required string Email { get; set; }
+
+    [Required]
+    public required string Password { get; set; }
+}
+
 public class AuthResponseDto
 {
     public int Id { get; set; }

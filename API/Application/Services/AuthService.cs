@@ -20,6 +20,9 @@ public class AuthService : IAuthService
         this.emailService = emailService;
     }
 
+    // -------------------------------------------------------------------------
+    // Registration
+    // -------------------------------------------------------------------------
     public async Task<ServiceResult<AuthResponseDto>> RegisterAsync(RegisterDto registerDto)
     {
 
@@ -82,6 +85,43 @@ public class AuthService : IAuthService
             data: result,
             title: "Registration successful",
             details: "Your account has been created successfully."
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Login
+    // -------------------------------------------------------------------------
+
+    public async Task<ServiceResult<string>> LoginAsync(LoginDto loginDto)
+    {
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        if (user == null)
+            return ServiceResult<string>.Failure(
+                title: "Invalid Credentials",
+                details: "No account found with that email address.",
+                statusCode: StatusCodes.Status404NotFound
+            );
+
+        var passwordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+        if (!passwordValid)
+            return ServiceResult<string>.Failure(
+                title: "Invalid Credentials",
+                details: "Incorrect password.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
+
+        // send OTP to email for 2FA
+        var code = await _otpService.GenerateOtpAsync(user.Email, OtpType.LoginEmail);
+
+        await emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {code}");
+        return ServiceResult<string>.Success(
+            data: "OTP Sent",
+#if DEBUG
+            title: $"Login OTP Sent , Your OTP is: {code}",
+#else
+            title: "OTP Sent",
+#endif
+            details: "A login OTP code has been sent to your email address. Please verify to complete login."
         );
     }
 
