@@ -11,15 +11,15 @@ public class ServiceResult<T>
 
     public required string Title { get; set; }
     public required string Details { get; set; }
-    public int Status { get; set; }
+    public int statusCode { get; set; }
 
 
     public static ServiceResult<T> Success(T data, string title, string details, int statusCode = StatusCodes.Status200OK) =>
-        new() { IsSuccess = true, Data = data, Status = statusCode, Title = title, Details = details };
+        new() { IsSuccess = true, Data = data, statusCode = statusCode, Title = title, Details = details };
 
     /// <summary>Creates a failure result with a title, details, and HTTP status code.</summary>
     public static ServiceResult<T> Failure(string title, string details, int statusCode) =>
-        new() { IsSuccess = false, Title = title, Details = details, Status = statusCode };
+        new() { IsSuccess = false, Title = title, Details = details, statusCode = statusCode };
 
     // ── Common failure shortcuts ───────────────────────────────────────────────
 
