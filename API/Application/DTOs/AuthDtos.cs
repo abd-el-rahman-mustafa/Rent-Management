@@ -17,7 +17,7 @@ public class RegisterDto
     public required string Email { get; set; }
 
     [Required]
-    [StringLength(6, MinimumLength = 6, ErrorMessage = "Email OTP must be exactly 6 digits.")]
+    [RegularExpression(@"^\d{6}$", ErrorMessage = " OTP must be a 6-digit number.")]
     public required string EmailOtpCode { get; set; }
 
     // [Required]
@@ -39,7 +39,7 @@ public class RegisterDto
     public required string ConfirmPassword { get; set; }
 }
 
-public class LoginDto
+public class LoginRequestDto
 {
     [Required]
     [EmailAddress]
@@ -49,13 +49,31 @@ public class LoginDto
     public required string Password { get; set; }
 }
 
+public class EmailOtpLoginDto
+{
+    [Required]
+    [EmailAddress]
+    public required string Email { get; set; }
+
+    [Required]
+    [RegularExpression(@"^\d{6}$", ErrorMessage = " OTP must be a 6-digit number.")]
+    public required string OtpCode { get; set; }
+}
+
+public class LoginResponse
+{
+    public required TokenDto Token { get; set; }
+    public required simpleUserInfoDto User { get; set; }
+}
+
+
 public class AuthResponseDto
 {
     public int Id { get; set; }
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
     public required string Email { get; set; }
-    public  string? Phone { get; set; }
+    public string? Phone { get; set; }
 }
 
 /// <summary>Used to request sending an OTP to the user's email.</summary>

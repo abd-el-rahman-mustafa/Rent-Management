@@ -33,20 +33,52 @@ public class AuthController : ControllerBase
         }
     }
 
+    [HttpPost("loginRequest")]
+    public async Task<IActionResult> loginRequest([FromBody] LoginRequestDto loginDto)
+    {
+        try
+        {
+            var authResponse = await _authService.loginRequestAsync(loginDto);
+            return authResponse.IsSuccess
+                    ? Ok(authResponse)
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.Status);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: 400);
+        }
+    }
+
+    [HttpPost("email-otp-login")]
+    public async Task<IActionResult> EmailOtpLogin([FromBody] VerifyEmailOtpDto dto)
+    {
+        try
+        {
+            var authResponse = await _authService.ConfirmEmailOtpAsync(dto, OtpType.LoginEmail);
+            return authResponse.IsSuccess
+                    ? Ok(authResponse)
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.Status);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Problem(detail: ex.Message, statusCode: 400);
+        }
+    }
+
     // Email OTP
     [HttpPost("send-email-otp")]
     public async Task<IActionResult> SendEmailOtp([FromBody] SendEmailOtpDto dto)
     {
         try
         {
-           var result =  await _authService.SendEmailOtpAsync(dto, OtpType.RegisterEmail);
+            var result = await _authService.SendEmailOtpAsync(dto, OtpType.RegisterEmail);
             return result.IsSuccess
                     ? Ok(result)
                     : Problem(detail: result.Details, statusCode: result.Status);
         }
         catch (InvalidOperationException ex)
         {
-            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError   );
+            return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
         }
     }
 

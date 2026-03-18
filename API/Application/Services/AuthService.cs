@@ -12,11 +12,13 @@ public class AuthService : IAuthService
     private readonly UserManager<AppUser> _userManager;
     private readonly IOtpService _otpService;
     private readonly IEmailService emailService;
+    private readonly IJwtService _jwtService;
 
-    public AuthService(UserManager<AppUser> userManager, IOtpService otpService, IEmailService emailService)
+    public AuthService(UserManager<AppUser> userManager, IOtpService otpService, IEmailService emailService, IJwtService jwtService)
     {
         _userManager = userManager;
         _otpService = otpService;
+        _jwtService = jwtService;
         this.emailService = emailService;
     }
 
@@ -35,22 +37,10 @@ public class AuthService : IAuthService
 
         if (!emailOtpValid)
             throw new InvalidOperationException("Invalid or expired email OTP code.");
-        // // verify phone otp
-        // var phoneOtpValid = await _otpService.ValidateOtpAsync(
-        //     identifier: registerDto.Phone,
-        //     otpType: OtpType.RegisterPhone,
-        //     otpCode: registerDto.PhoneOtpCode
-        // );
-        // if (!phoneOtpValid)
-        //     throw new InvalidOperationException("Invalid or expired phone OTP code.");
-
+       
         // verify that email is unique (not already taken by another user)
         if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
             throw new InvalidOperationException("An account with that email address already exists.");
-
-        // // verify that phone number is unique (not already taken by another user)
-        // if (await _userManager.Users.AnyAsync(u => u.PhoneNumber == registerDto.Phone))
-        //     throw new InvalidOperationException("An account with that phone number already exists.");
 
         var user = new AppUser
         {
@@ -92,7 +82,7 @@ public class AuthService : IAuthService
     // Login
     // -------------------------------------------------------------------------
 
-    public async Task<ServiceResult<string>> LoginAsync(LoginDto loginDto)
+    public async Task<ServiceResult<string>> loginRequestAsync(LoginRequestDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
         if (user == null)
@@ -122,6 +112,34 @@ public class AuthService : IAuthService
             title: "OTP Sent",
 #endif
             details: "A login OTP code has been sent to your email address. Please verify to complete login."
+        );
+    }
+
+    public async Task<ServiceResult<string>> EmailOtpLoginAsync(EmailOtpLoginDto loginDto)
+    {
+        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        if (user == null)
+            return ServiceResult<string>.Failure(
+                title: "Invalid Credentials",
+                details: "No account found with that email address.",
+                statusCode: StatusCodes.Status404NotFound
+            );
+
+        var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.OtpCode);
+        if (!valid)
+            return ServiceResult<string>.Failure(
+                title: "Invalid OTP",
+                details: "The provided OTP code is invalid or has expired.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
+        // For now, we'll assume the OTP is valid and proceed with login
+
+        // Generate a JWT token for the user
+        var token = await _jwtService.GenerateTokenAsync(user);
+        return ServiceResult<string>.Success(
+            data: token,
+            title: "Login Successful",
+            details: "You have been logged in successfully."
         );
     }
 
