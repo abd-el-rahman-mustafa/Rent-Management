@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
             var authResponse = await _authService.RegisterAsync(registerDto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
-                    : Problem(detail: authResponse.Details, statusCode: authResponse.statusCode);
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.StatusCode);
 
         }
         catch (InvalidOperationException ex)
@@ -41,7 +41,7 @@ public class AuthController : ControllerBase
             var authResponse = await _authService.loginRequestAsync(loginDto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
-                    : Problem(detail: authResponse.Details, statusCode: authResponse.statusCode);
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.StatusCode);
         }
         catch (InvalidOperationException ex)
         {
@@ -57,7 +57,7 @@ public class AuthController : ControllerBase
             var authResponse = await _authService.EmailOtpLoginAsync(dto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
-                    : Problem(detail: authResponse.Details, statusCode: authResponse.statusCode);
+                    : Problem(detail: authResponse.Details, statusCode: authResponse.StatusCode);
         }
         catch (InvalidOperationException ex)
         {
@@ -74,7 +74,7 @@ public class AuthController : ControllerBase
             var result = await _authService.SendEmailOtpAsync(dto, OtpType.RegisterEmail);
             return result.IsSuccess
                     ? Ok(result)
-                    : Problem(detail: result.Details, statusCode: result.statusCode);
+                    : Problem(detail: result.Details, statusCode: result.StatusCode);
         }
         catch (InvalidOperationException ex)
         {

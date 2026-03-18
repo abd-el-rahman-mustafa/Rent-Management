@@ -140,7 +140,7 @@ public class AuthService : IAuthService
             return ServiceResult<TokenResponseDto>.Failure(
                 "Token Generation Failed",
                  result.Details,
-                result.statusCode
+                result.StatusCode
             );
 
         return ServiceResult<TokenResponseDto>.Success(
