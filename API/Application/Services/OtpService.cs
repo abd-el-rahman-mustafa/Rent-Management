@@ -8,7 +8,7 @@ namespace API.Application.Services;
 
 public class OtpService : IOtpService
 {
-    private static readonly TimeSpan OtpValidity = TimeSpan.FromMinutes(10);
+    private static readonly TimeSpan OtpValidity = TimeSpan.FromMinutes(1);
     private static readonly TimeSpan SignupOtpValidity = TimeSpan.FromMinutes(3);
 
     private readonly DataContext _context;

@@ -29,6 +29,10 @@ public enum OtpType
     ResetPasswordPhone,
     LoginEmail,
     LoginPhone,
+    PasswordReset2FAEmail,
+    PasswordReset2FAPhone,
+    passwordForgetEmail,
+    passwordForgetPhone,
 
     // add more types as needed (e.g. 2FA, etc.)
 }

@@ -65,7 +65,7 @@ public class AuthController : ControllerBase
         }
     }
 
-    // Email OTP
+    // Email OTP For Registration 
     [HttpPost("send-email-otp")]
     public async Task<IActionResult> SendEmailOtp([FromBody] SendEmailOtpDto dto)
     {
