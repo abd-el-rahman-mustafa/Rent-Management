@@ -50,11 +50,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("email-otp-login")]
-    public async Task<IActionResult> EmailOtpLogin([FromBody] VerifyEmailOtpDto dto)
+    public async Task<IActionResult> EmailOtpLogin([FromBody] EmailOtpLoginDto dto)
     {
         try
         {
-            var authResponse = await _authService.ConfirmEmailOtpAsync(dto, OtpType.LoginEmail);
+            var authResponse = await _authService.EmailOtpLoginAsync(dto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
                     : Problem(detail: authResponse.Details, statusCode: authResponse.statusCode);

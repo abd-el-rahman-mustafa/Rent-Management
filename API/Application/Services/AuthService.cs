@@ -125,7 +125,7 @@ public class AuthService : IAuthService
                 statusCode: StatusCodes.Status404NotFound
             );
 
-        var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.OtpCode);
+        var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.Otp);
         if (!valid)
             return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid OTP",
@@ -261,7 +261,7 @@ public class AuthService : IAuthService
             );
 
 
-        var valid = await _otpService.ValidateOtpAsync(dto.PhoneNumber, otpType, dto.OtpCode);
+        var valid = await _otpService.ValidateOtpAsync(dto.PhoneNumber, otpType, dto.Otp);
         if (!valid)
             return ServiceResult<bool>.Failure(
                 title: "Invalid OTP",

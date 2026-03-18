@@ -57,7 +57,7 @@ public class EmailOtpLoginDto
 
     [Required]
     [RegularExpression(@"^\d{6}$", ErrorMessage = " OTP must be a 6-digit number.")]
-    public required string OtpCode { get; set; }
+    public required string Otp { get; set; }
 }
 
 public class LoginResponse
@@ -100,7 +100,7 @@ public class VerifyEmailOtpDto
     public required string Email { get; set; }
 
     [Required]
-    [StringLength(6, MinimumLength = 6, ErrorMessage = "OTP must be exactly 6 digits.")]
+    [RegularExpression(@"^\d{6}$", ErrorMessage = " OTP must be a 6-digit number.")]
     public required string Otp { get; set; }
 }
 
@@ -112,6 +112,6 @@ public class VerifyPhoneOtpDto
     public required string PhoneNumber { get; set; }
 
     [Required]
-    [StringLength(6, MinimumLength = 6, ErrorMessage = "OTP must be exactly 6 digits.")]
-    public required string OtpCode { get; set; }
+    [RegularExpression(@"^\d{6}$", ErrorMessage = " OTP must be a 6-digit number.")]
+    public required string Otp { get; set; }
 }
