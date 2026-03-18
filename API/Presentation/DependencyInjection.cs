@@ -2,6 +2,7 @@ using API.Application.Services;
 using API.Application.Interfaces;
 using API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using API.Application.DTOs;
 
 namespace API.Middleware;
 
@@ -15,6 +16,9 @@ public static class DependencyInjection
 
         // Configure email settings
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+
+        // Configure JWT settings
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         
         // Service registrations
         services.AddScoped<IAuthService, AuthService>();
