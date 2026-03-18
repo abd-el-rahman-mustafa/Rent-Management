@@ -4,18 +4,20 @@ import { Component, inject, } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormInput } from '../../../shared/components/input/input';
 import { ToastrService } from 'ngx-toastr';
-import { passwordValidator } from '../../../shared/validators/validators';
-import { LoginDto, RegisterDto } from '../auth.interface';
+import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
+import { LoginDto, LoginOtpDto, RegisterDto } from '../auth.interface';
+import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule, ReactiveFormsModule, FormInput],
+  imports: [CommonModule, ReactiveFormsModule, FormInput, Countdown],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
-  form: FormGroup = new FormGroup({});
+  requestForm: FormGroup = new FormGroup({});
+  otpLoginForm: FormGroup = new FormGroup({});
 
   otpSent = false;
   otpCountdown = 30; // 30 seconds
@@ -33,13 +35,17 @@ export class Login {
     this.initializeForm();
   }
   initializeForm() {
-    this.form = this.fb.nonNullable.group({
+    this.requestForm = this.fb.nonNullable.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, passwordValidator]],
     });
+    this.otpLoginForm = this.fb.nonNullable.group({
+      email: ['', [Validators.required, Validators.email]],
+      otp: ['', [Validators.required, otpValidator]],
+    });
   }
   sendOtp() {
-   
+
   }
 
   startCountdown() {
@@ -55,23 +61,54 @@ export class Login {
     }, 1000);
   }
 
-  onSubmit() {
-    if (this.form.valid) {
-      console.log('Form Submitted successfully:', this.form.value);
+  sendLoginRequest() {
+    if (this.requestForm.valid) {
+      console.log('Form Submitted successfully:', this.requestForm.value);
       const loginDto: LoginDto = {
-        ...this.form.value
+        ...this.requestForm.value
       };
 
-      this.authService.login(loginDto).subscribe({
+      this.authService.loginRequest(loginDto).subscribe({
         next: (response) => {
-          console.log('Login successful:', response);
+          this.toastr.success(response.details, response.title);
+
+          // set email in otp form for convenience
+          this.otpLoginForm.patchValue({ email: loginDto.email });
+          this.otpSent = true;
+          this.startCountdown();
+
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
         }
       });
     } else {
-      this.form.markAllAsTouched();
+      this.requestForm.markAllAsTouched();
+    }
+  }
+
+  verifyOtp() {
+    if (this.otpLoginForm.valid) {
+      console.log('OTP Form Submitted successfully:', this.otpLoginForm.value);
+      const otpDto: LoginOtpDto = {
+        ...this.otpLoginForm.value
+      };
+
+      this.authService.emailOtpLogin(otpDto).subscribe({
+        next: (response) => {
+        //  store token and user data in local storage or a service
+          
+          console.log('OTP Login successful:', response);
+          // localStorage.setItem('token', response.token);
+          // localStorage.setItem('user', JSON.stringify(response.user));
+        },
+        error: (error) => {
+          // this.toastr.error(error.error.message, 'Error');
+        }
+      });
+    }
+    else {
+      this.otpLoginForm.markAllAsTouched();
     }
   }
 

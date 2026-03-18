@@ -14,5 +14,10 @@ export interface LoginDto {
 
 export interface LoginOtpDto {
     email: string;
-    otpCode: string;
+    otp: string;
+}
+
+export interface LoginResponse {
+    accessToken: string;
+    accessTokenExpires: string; // ISO string
 }
