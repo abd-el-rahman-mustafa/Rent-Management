@@ -101,7 +101,7 @@ public class VerifyEmailOtpDto
 
     [Required]
     [StringLength(6, MinimumLength = 6, ErrorMessage = "OTP must be exactly 6 digits.")]
-    public required string OtpCode { get; set; }
+    public required string Otp { get; set; }
 }
 
 /// <summary>Used to submit the OTP code received via SMS for confirmation.</summary>

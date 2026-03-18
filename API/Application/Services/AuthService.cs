@@ -192,7 +192,7 @@ public class AuthService : IAuthService
             );
 
 
-        var valid = await _otpService.ValidateOtpAsync(dto.Email, otpType, dto.OtpCode);
+        var valid = await _otpService.ValidateOtpAsync(dto.Email, otpType, dto.Otp);
         if (!valid)
             return ServiceResult<bool>.Failure(
                 title: "Invalid OTP",
