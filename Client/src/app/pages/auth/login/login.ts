@@ -20,7 +20,7 @@ export class Login {
   otpLoginForm: FormGroup = new FormGroup({});
 
   otpSent = false;
-  otpCountdown = 30; // 30 seconds
+  otpCountdown = 60; // 60 seconds
   intervalId: any;
 
   toastr = inject(ToastrService);
@@ -44,12 +44,9 @@ export class Login {
       otp: ['', [Validators.required, otpValidator]],
     });
   }
-  sendOtp() {
-
-  }
 
   startCountdown() {
-    this.otpCountdown = 30;
+    this.otpCountdown = 60; // reset to 60 seconds
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
@@ -96,11 +93,10 @@ export class Login {
 
       this.authService.emailOtpLogin(otpDto).subscribe({
         next: (response) => {
-        //  store token and user data in local storage or a service
-          
-          console.log('OTP Login successful:', response);
-          // localStorage.setItem('token', response.token);
-          // localStorage.setItem('user', JSON.stringify(response.user));
+          //  store token and user data in local storage or a service
+
+          this.toastr.success(response.details, response.title);
+          this.saveToken(response.data.accessToken);
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
@@ -112,6 +108,26 @@ export class Login {
     }
   }
 
+  reSendOtp() {
+
+    const loginDto: LoginDto = {
+      ...this.requestForm.value
+    };
+    this.authService.loginRequest(loginDto).subscribe({
+      next: (response) => {
+        this.toastr.success(response.details, response.title);
+        this.startCountdown();
+        this.otpLoginForm.patchValue({ email: loginDto.email });
+      },
+      error: (error) => {
+        // this.toastr.error(error.error.message, 'Error');
+      }
+    });
+
+  }
+  saveToken(token: string) {
+    localStorage.setItem('accessToken', token);
+  }
   ngOnDestroy() {
     if (this.intervalId) {
       clearInterval(this.intervalId);

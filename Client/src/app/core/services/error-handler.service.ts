@@ -22,11 +22,12 @@ export class ErrorHandlerService {
     private normalize(error: HttpErrorResponse): ApiResponse<any> {
         if (error.status === 0) {
             // Status 0 = no internet / CORS / server completely down
-            return { statusCode: 0, title: 'No Internet Connection', details: 'No internet connection. Please try again.' };
+            return { statusCode: 0, data: '', title: 'No Internet Connection', details: 'No internet connection. Please try again.' };
         }
 
         return {
             statusCode: error.status,
+            data: 'null',
             details: error.error?.message ?? error.message ?? 'Unexpected error',
             errors: error.error?.errors ?? null,
             title: error.error?.title ?? 'Error',
