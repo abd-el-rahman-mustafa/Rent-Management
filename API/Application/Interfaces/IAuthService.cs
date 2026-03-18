@@ -21,7 +21,7 @@ public interface IAuthService
         /// <summary>
         /// Authenticates a user with email and otp.
         /// Returns a JWT token if successful, or throws on failure.
-    Task<ServiceResult<string>> EmailOtpLoginAsync(LoginRequestDto loginDto);
+    Task<ServiceResult<TokenResponseDto>> EmailOtpLoginAsync(EmailOtpLoginDto loginDto);
 
     /// <summary>
     /// Generates an OTP code and sends it to the user's email address.

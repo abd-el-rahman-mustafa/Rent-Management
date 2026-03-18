@@ -62,7 +62,7 @@ public class EmailOtpLoginDto
 
 public class LoginResponse
 {
-    public required TokenDto Token { get; set; }
+    public required TokenResponseDto Token { get; set; }
     public required simpleUserInfoDto User { get; set; }
 }
 

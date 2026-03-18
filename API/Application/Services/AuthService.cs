@@ -37,7 +37,7 @@ public class AuthService : IAuthService
 
         if (!emailOtpValid)
             throw new InvalidOperationException("Invalid or expired email OTP code.");
-       
+
         // verify that email is unique (not already taken by another user)
         if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
             throw new InvalidOperationException("An account with that email address already exists.");
@@ -115,11 +115,11 @@ public class AuthService : IAuthService
         );
     }
 
-    public async Task<ServiceResult<string>> EmailOtpLoginAsync(EmailOtpLoginDto loginDto)
+    public async Task<ServiceResult<TokenResponseDto>> EmailOtpLoginAsync(EmailOtpLoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
         if (user == null)
-            return ServiceResult<string>.Failure(
+            return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid Credentials",
                 details: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
@@ -127,7 +127,7 @@ public class AuthService : IAuthService
 
         var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.OtpCode);
         if (!valid)
-            return ServiceResult<string>.Failure(
+            return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid OTP",
                 details: "The provided OTP code is invalid or has expired.",
                 statusCode: StatusCodes.Status400BadRequest
@@ -135,10 +135,17 @@ public class AuthService : IAuthService
         // For now, we'll assume the OTP is valid and proceed with login
 
         // Generate a JWT token for the user
-        var token = await _jwtService.GenerateTokenAsync(user);
-        return ServiceResult<string>.Success(
-            data: token,
-            title: "Login Successful",
+        var result = await _jwtService.GenerateTokenAsync(user);
+        if (!result.IsSuccess)
+            return ServiceResult<TokenResponseDto>.Failure(
+                "Token Generation Failed",
+                 result.Details,
+                result.statusCode
+            );
+
+        return ServiceResult<TokenResponseDto>.Success(
+            data: result.Data!,
+            title: "Login successful",
             details: "You have been logged in successfully."
         );
     }

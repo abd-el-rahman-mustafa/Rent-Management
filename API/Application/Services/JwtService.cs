@@ -20,45 +20,58 @@ public class JwtService : IJwtService
     }
     public async Task<ServiceResult<TokenResponseDto>> GenerateTokenAsync(AppUser user)
     {
-        // Steps 
-        // 1. Create claims based on user information
-        var claims = new[]
+        try
         {
+
+
+            // Steps 
+            // 1. Create claims based on user information
+            var claims = new[]
+            {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
         };
-        // 2. Create signing credentials using the secret key
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        // 3. Create the JWT token with claims, signing credentials, and expiration
+            // 2. Create signing credentials using the secret key
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            // 3. Create the JWT token with claims, signing credentials, and expiration
 
-        var expires = DateTimeOffset.UtcNow.AddMinutes(_tokenSettings.ExpiryMinutes);
+            var expires = DateTimeOffset.UtcNow.AddMinutes(_tokenSettings.ExpiryMinutes);
 
-        var tokenDescriptor = new SecurityTokenDescriptor
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = expires.UtcDateTime,
+                SigningCredentials = creds
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+            var response = new TokenResponseDto
+            {
+                AccessToken = tokenString,
+                AccessTokenExpires = expires
+            };
+            // 4. Return the token and its expiration time
+
+            return ServiceResult<TokenResponseDto>.Success(
+                response,
+                "Token Generated",
+                "JWT token generated successfully."
+            );
+        }
+        catch (Exception ex)
         {
-            Subject = new ClaimsIdentity(claims),
-            Expires = expires.UtcDateTime,
-            SigningCredentials = creds
-        };
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-        var response = new TokenResponseDto
-        {
-            AccessToken = tokenString,
-            AccessTokenExpires = expires
-        };
-        // 4. Return the token and its expiration time
-
-        return ServiceResult<TokenResponseDto>.Success(
-            response,
-            "Token Generated",
-            "JWT token generated successfully."
-        );
-
+            // Log the exception (not implemented here)
+            return ServiceResult<TokenResponseDto>.Failure(
+                "Token Generation Failed",
+                $"An error occurred while generating the token: {ex.Message}",
+                StatusCodes.Status500InternalServerError
+            );
+        }
 
     }
 }
