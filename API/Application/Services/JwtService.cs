@@ -5,19 +5,60 @@ using API.Application.DTOs;
 using API.Application.Interfaces;
 using API.Domain.Entities;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 public class JwtService : IJwtService
 {
     private readonly JwtSettings _tokenSettings;
 
-    private readonly int AccessTokenExpirationMinutes = 60; //Access Token valid for 60 minutes
     public JwtService(IOptions<JwtSettings> tokenSettings)
     {
         _tokenSettings = tokenSettings.Value;
     }
-    public async Task<ServiceResult<TokenDto>> GenerateTokenAsync(AppUser user)
+    public async Task<ServiceResult<TokenResponseDto>> GenerateTokenAsync(AppUser user)
     {
-        
-        
+        // Steps 
+        // 1. Create claims based on user information
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
+        };
+        // 2. Create signing credentials using the secret key
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        // 3. Create the JWT token with claims, signing credentials, and expiration
+
+        var expires = DateTimeOffset.UtcNow.AddMinutes(_tokenSettings.ExpiryMinutes);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = expires.UtcDateTime,
+            SigningCredentials = creds
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+
+        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+
+        var response = new TokenResponseDto
+        {
+            AccessToken = tokenString,
+            AccessTokenExpires = expires
+        };
+        // 4. Return the token and its expiration time
+
+        return ServiceResult<TokenResponseDto>.Success(
+            response,
+            "Token Generated",
+            "JWT token generated successfully."
+        );
+
+
     }
 }

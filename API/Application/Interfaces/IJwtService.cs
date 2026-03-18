@@ -11,5 +11,5 @@ public interface IJwtService
     /// Validates user credentials and generates a JWT token if valid.
     /// Returns the token on success, or an error result on failure.
     /// </summary>
-    Task<ServiceResult<TokenDto>> GenerateTokenAsync(AppUser user);
+    Task<ServiceResult<TokenResponseDto>> GenerateTokenAsync(AppUser user);
 }

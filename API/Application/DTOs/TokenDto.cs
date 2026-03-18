@@ -1,12 +1,12 @@
 namespace API.Application.DTOs;
 
-public class TokenDto
+public class TokenResponseDto
 {
     public string AccessToken { get; set; } = string.Empty;
-    public double AccessTokenExpirationMinutes { get; set; }
+    public DateTimeOffset AccessTokenExpires { get; set; }
 }
-
 public class JwtSettings
 {
     public string SecretKey { get; set; } = string.Empty;
+    public int ExpiryMinutes { get; set; }
 }
