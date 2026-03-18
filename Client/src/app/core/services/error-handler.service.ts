@@ -22,11 +22,11 @@ export class ErrorHandlerService {
     private normalize(error: HttpErrorResponse): ApiResponse<any> {
         if (error.status === 0) {
             // Status 0 = no internet / CORS / server completely down
-            return { status: 0, title: 'No Internet Connection', details: 'No internet connection. Please try again.' };
+            return { statusCode: 0, title: 'No Internet Connection', details: 'No internet connection. Please try again.' };
         }
 
         return {
-            status: error.status,
+            statusCode: error.status,
             details: error.error?.message ?? error.message ?? 'Unexpected error',
             errors: error.error?.errors ?? null,
             title: error.error?.title ?? 'Error',
@@ -34,7 +34,7 @@ export class ErrorHandlerService {
     }
     // Step B:take action based on status
     private action(error: ApiResponse<any>): void {
-        switch (error.status) {
+        switch (error.statusCode) {
             case 401:
                 localStorage.removeItem('token');
                 this.router.navigate(['/login']);
@@ -58,7 +58,7 @@ export class ErrorHandlerService {
 
     // Step C: log to external monitoring (Sentry, Datadog, etc.)
     private log(error: ApiResponse<any>): void {
-        if (error.status >= 500) {
+        if (error.statusCode >= 500) {
             console.error('[SERVER ERROR]', error);
         } else {
             console.warn('[CLIENT ERROR]', error);

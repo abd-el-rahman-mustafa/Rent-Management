@@ -3,6 +3,6 @@ export interface ApiResponse<T> {
     isSuccess?: boolean;
     title?: string;
     details?: string;
-    status: number;
+    statusCode: number;
     errors?: Record<string, string[]>; // validation errors from backend
 }
