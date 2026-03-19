@@ -7,8 +7,11 @@ export class LoadingService {
     isLoading = signal(false);
 
     show() {
-        this.requestCount++;
-        this.isLoading.set(true);
+        setTimeout(() => {
+            if (this.requestCount > 0) {
+                this.isLoading.set(true);
+            }
+        }, 150);
     }
 
     hide() {
