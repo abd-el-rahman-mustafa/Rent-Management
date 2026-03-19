@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormInput } from '../../../shared/components/input/input';
 import { ToastrService } from 'ngx-toastr';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
-import { LoginDto, LoginOtpDto, RegisterDto } from '../auth.interface';
+import { LoginDto, LoginOtpDto, LoginResponse, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 
 
@@ -96,7 +96,7 @@ export class Login {
           //  store token and user data in local storage or a service
 
           this.toastr.success(response.details, response.title);
-          this.saveToken(response.data.accessToken);
+          this.saveToken(response.data);
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
@@ -125,8 +125,9 @@ export class Login {
     });
 
   }
-  saveToken(token: string) {
-    localStorage.setItem('accessToken', token);
+  saveToken(token: LoginResponse) {
+    localStorage.setItem('accessToken', token.accessToken);
+    localStorage.setItem('accessTokenExpires', token.accessTokenExpires);
   }
   ngOnDestroy() {
     if (this.intervalId) {
