@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
 import { LoginDto, LoginOtpDto, LoginResponse, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class Login {
   intervalId: any;
 
   toastr = inject(ToastrService);
+  router = inject(Router);
   /**
    *
    */
@@ -97,6 +99,9 @@ export class Login {
 
           this.toastr.success(response.details, response.title);
           this.saveToken(response.data);
+
+          // navigate to home page or dashboard
+           this.router.navigate(['/']);
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
