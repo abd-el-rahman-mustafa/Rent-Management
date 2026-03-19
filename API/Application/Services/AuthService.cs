@@ -74,7 +74,7 @@ public class AuthService : IAuthService
         return ServiceResult<AuthResponseDto>.Success(
             data: result,
             title: "Registration successful",
-            details: "Your account has been created successfully."
+            detail: "Your account has been created successfully."
         );
     }
 
@@ -88,7 +88,7 @@ public class AuthService : IAuthService
         if (user == null)
             return ServiceResult<string>.Failure(
                 title: "Invalid Credentials",
-                details: "No account found with that email address.",
+                detail: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
             );
 
@@ -96,7 +96,7 @@ public class AuthService : IAuthService
         if (!passwordValid)
             return ServiceResult<string>.Failure(
                 title: "Invalid Credentials",
-                details: "Incorrect password.",
+                detail: "Incorrect password.",
                 statusCode: StatusCodes.Status400BadRequest
             );
 
@@ -106,12 +106,12 @@ public class AuthService : IAuthService
         await emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {code}");
         return ServiceResult<string>.Success(
             data: "OTP Sent",
+            title: "Success",
 #if DEBUG
-            title: $"Login OTP Sent , Your OTP is: {code}",
+            detail: $"Login OTP Sent , Your OTP is: {code}"
 #else
-            title: "OTP Sent",
+            detail: "Login OTP Sent to your email address."
 #endif
-            details: "A login OTP code has been sent to your email address. Please verify to complete login."
         );
     }
 
@@ -121,7 +121,7 @@ public class AuthService : IAuthService
         if (user == null)
             return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid Credentials",
-                details: "No account found with that email address.",
+                detail: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
             );
 
@@ -129,7 +129,7 @@ public class AuthService : IAuthService
         if (!valid)
             return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid OTP",
-                details: "The provided OTP code is invalid or has expired.",
+                detail: "The provided OTP code is invalid or has expired.",
                 statusCode: StatusCodes.Status400BadRequest
             );
         // For now, we'll assume the OTP is valid and proceed with login
@@ -139,14 +139,14 @@ public class AuthService : IAuthService
         if (!result.IsSuccess)
             return ServiceResult<TokenResponseDto>.Failure(
                 "Token Generation Failed",
-                 result.Details,
+                 result.Detail,
                 result.StatusCode
             );
 
         return ServiceResult<TokenResponseDto>.Success(
             data: result.Data!,
             title: "Login successful",
-            details: "You have been logged in successfully."
+            detail: "You have been logged in successfully."
         );
     }
 
@@ -164,7 +164,7 @@ public class AuthService : IAuthService
             if (user == null)
                 return ServiceResult<bool>.Failure(
                      title: "Email Not Found",
-                     details: "No account found with that email address.",
+                     detail: "No account found with that email address.",
                      statusCode: StatusCodes.Status404NotFound
                  );
 
@@ -177,7 +177,7 @@ public class AuthService : IAuthService
         return ServiceResult<bool>.Success(
             data: true,
             title: "OTP Sent",
-            details: "OTP code has been sent to the provided email address."
+            detail: "OTP code has been sent to the provided email address."
         );
     }
 
@@ -187,7 +187,7 @@ public class AuthService : IAuthService
         if (user == null)
             return ServiceResult<bool>.Failure(
                 title: "Email Not Found",
-                details: "No account found with that email address.",
+                detail: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
             );
 
@@ -196,7 +196,7 @@ public class AuthService : IAuthService
         if (!valid)
             return ServiceResult<bool>.Failure(
                 title: "Invalid OTP",
-                details: "The provided OTP code is invalid or has expired.",
+                detail: "The provided OTP code is invalid or has expired.",
                 statusCode: StatusCodes.Status400BadRequest
             );
 
@@ -210,7 +210,7 @@ public class AuthService : IAuthService
 
             return ServiceResult<bool>.Failure(
                 title: "Email Confirmation Failed",
-                details: $"Failed to confirm email: {errors}",
+                detail: $"Failed to confirm email: {errors}",
                 statusCode: StatusCodes.Status500InternalServerError
             );
         }
@@ -218,7 +218,7 @@ public class AuthService : IAuthService
         return ServiceResult<bool>.Success(
             data: true,
             title: "Email Confirmed",
-            details: "Your email has been confirmed successfully."
+            detail: "Your email has been confirmed successfully."
         );
     }
 
@@ -234,7 +234,7 @@ public class AuthService : IAuthService
         if (user == null)
             return ServiceResult<bool>.Failure(
                  title: "Phone Number Not Found",
-                 details: "No account found with that phone number.",
+                 detail: "No account found with that phone number.",
                  statusCode: StatusCodes.Status404NotFound
              );
 
@@ -244,7 +244,7 @@ public class AuthService : IAuthService
         return ServiceResult<bool>.Success(
             data: true,
             title: "OTP Sent",
-            details: "OTP code has been sent to the provided phone number."
+            detail: "OTP code has been sent to the provided phone number."
         );
     }
 
@@ -256,7 +256,7 @@ public class AuthService : IAuthService
         if (user == null)
             return ServiceResult<bool>.Failure(
                 title: "Phone Number Not Found",
-                details: "No account found with that phone number.",
+                detail: "No account found with that phone number.",
                 statusCode: StatusCodes.Status404NotFound
             );
 
@@ -265,7 +265,7 @@ public class AuthService : IAuthService
         if (!valid)
             return ServiceResult<bool>.Failure(
                 title: "Invalid OTP",
-                details: "The provided OTP code is invalid or has expired.",
+                detail: "The provided OTP code is invalid or has expired.",
                 statusCode: StatusCodes.Status400BadRequest
             );
 
@@ -278,7 +278,7 @@ public class AuthService : IAuthService
             var errors = string.Join(", ", result.Errors.Select(e => e.Description));
             return ServiceResult<bool>.Failure(
                 title: "Phone Number Confirmation Failed",
-                details: $"Failed to confirm phone number: {errors}",
+                detail: $"Failed to confirm phone number: {errors}",
                 statusCode: StatusCodes.Status500InternalServerError
             );
         }
@@ -286,7 +286,7 @@ public class AuthService : IAuthService
         return ServiceResult<bool>.Success(
             data: true,
             title: "Phone Number Confirmed",
-            details: "Your phone number has been confirmed successfully."
+            detail: "Your phone number has been confirmed successfully."
         );
     }
 }
