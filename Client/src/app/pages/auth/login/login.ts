@@ -1,6 +1,6 @@
 import { AuthService } from './../auth.service';
 import { CommonModule } from '@angular/common';
-import { Component, inject, } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormInput } from '../../../shared/components/input/input';
 import { ToastrService } from 'ngx-toastr';
@@ -8,7 +8,6 @@ import { otpValidator, passwordValidator } from '../../../shared/validators/vali
 import { LoginDto, LoginOtpDto, LoginResponse, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-login',
@@ -29,9 +28,10 @@ export class Login {
   /**
    *
    */
-  constructor(private authService: AuthService, private fb: FormBuilder,) {
-
-  }
+  constructor(
+    private authService: AuthService,
+    private fb: FormBuilder,
+  ) {}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -42,7 +42,6 @@ export class Login {
       password: ['', [Validators.required, passwordValidator]],
     });
     this.otpLoginForm = this.fb.nonNullable.group({
-      email: ['', [Validators.required, Validators.email]],
       otp: ['', [Validators.required, otpValidator]],
     });
   }
@@ -64,22 +63,19 @@ export class Login {
     if (this.requestForm.valid) {
       console.log('Form Submitted successfully:', this.requestForm.value);
       const loginDto: LoginDto = {
-        ...this.requestForm.value
+        ...this.requestForm.value,
       };
 
       this.authService.loginRequest(loginDto).subscribe({
         next: (response) => {
           this.toastr.success(response.details, response.title);
 
-          // set email in otp form for convenience
-          this.otpLoginForm.patchValue({ email: loginDto.email });
           this.otpSent = true;
           this.startCountdown();
-
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
-        }
+        },
       });
     } else {
       this.requestForm.markAllAsTouched();
@@ -90,7 +86,8 @@ export class Login {
     if (this.otpLoginForm.valid) {
       console.log('OTP Form Submitted successfully:', this.otpLoginForm.value);
       const otpDto: LoginOtpDto = {
-        ...this.otpLoginForm.value
+        email: this.requestForm.value.email,
+        otp: this.otpLoginForm.value.otp,
       };
 
       this.authService.emailOtpLogin(otpDto).subscribe({
@@ -101,34 +98,30 @@ export class Login {
           this.saveToken(response.data);
 
           // navigate to home page or dashboard
-           this.router.navigate(['/']);
+          this.router.navigate(['/']);
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
-        }
+        },
       });
-    }
-    else {
+    } else {
       this.otpLoginForm.markAllAsTouched();
     }
   }
 
   reSendOtp() {
-
     const loginDto: LoginDto = {
-      ...this.requestForm.value
+      ...this.requestForm.value,
     };
     this.authService.loginRequest(loginDto).subscribe({
       next: (response) => {
         this.toastr.success(response.details, response.title);
         this.startCountdown();
-        this.otpLoginForm.patchValue({ email: loginDto.email });
       },
       error: (error) => {
         // this.toastr.error(error.error.message, 'Error');
-      }
+      },
     });
-
   }
   saveToken(token: LoginResponse) {
     localStorage.setItem('accessToken', token.accessToken);
@@ -139,5 +132,4 @@ export class Login {
       clearInterval(this.intervalId);
     }
   }
-
 }
