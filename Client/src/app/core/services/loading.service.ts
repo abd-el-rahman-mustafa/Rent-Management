@@ -2,8 +2,21 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class LoadingService {
+    private requestCount = 0;
+
     isLoading = signal(false);
 
-    show() { this.isLoading.set(true); }
-    hide() { this.isLoading.set(false); }
+    show() {
+        this.requestCount++;
+        this.isLoading.set(true);
+    }
+
+    hide() {
+        this.requestCount--;
+
+        if (this.requestCount <= 0) {
+            this.isLoading.set(false);
+            this.requestCount = 0;
+        }
+    }
 }
