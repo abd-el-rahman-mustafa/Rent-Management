@@ -17,7 +17,7 @@ export interface LoginOtpDto {
     otp: string;
 }
 
-export interface LoginResponse {
+export interface AuthToken {
     accessToken: string;
     accessTokenExpires: string; // ISO string
 }

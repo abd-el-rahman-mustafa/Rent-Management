@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormInput } from '../../../shared/components/input/input';
 import { ToastrService } from 'ngx-toastr';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
-import { LoginDto, LoginOtpDto, LoginResponse, RegisterDto } from '../auth.interface';
+import { LoginDto, LoginOtpDto, AuthToken, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { Router } from '@angular/router';
 
@@ -31,7 +31,7 @@ export class Login {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -61,21 +61,17 @@ export class Login {
 
   sendLoginRequest() {
     if (this.requestForm.valid) {
-      console.log('Form Submitted successfully:', this.requestForm.value);
       const loginDto: LoginDto = {
         ...this.requestForm.value,
       };
 
       this.authService.loginRequest(loginDto).subscribe({
         next: (response) => {
-          this.toastr.success(response.details, response.title);
-
+          this.toastr.success(response.detail, response.title);
+          console.log( response.detail);
           this.otpSent = true;
           this.startCountdown();
-        },
-        error: (error) => {
-          // this.toastr.error(error.error.message, 'Error');
-        },
+        }
       });
     } else {
       this.requestForm.markAllAsTouched();
@@ -84,7 +80,6 @@ export class Login {
 
   verifyOtp() {
     if (this.otpLoginForm.valid) {
-      console.log('OTP Form Submitted successfully:', this.otpLoginForm.value);
       const otpDto: LoginOtpDto = {
         email: this.requestForm.value.email,
         otp: this.otpLoginForm.value.otp,
@@ -92,17 +87,12 @@ export class Login {
 
       this.authService.emailOtpLogin(otpDto).subscribe({
         next: (response) => {
-          //  store token and user data in local storage or a service
-
-          this.toastr.success(response.details, response.title);
+          this.toastr.success(response.detail, response.title);
           this.saveToken(response.data);
 
           // navigate to home page or dashboard
           this.router.navigate(['/']);
-        },
-        error: (error) => {
-          // this.toastr.error(error.error.message, 'Error');
-        },
+        }
       });
     } else {
       this.otpLoginForm.markAllAsTouched();
@@ -115,7 +105,7 @@ export class Login {
     };
     this.authService.loginRequest(loginDto).subscribe({
       next: (response) => {
-        this.toastr.success(response.details, response.title);
+        this.toastr.success(response.detail, response.title);
         this.startCountdown();
       },
       error: (error) => {
@@ -123,9 +113,8 @@ export class Login {
       },
     });
   }
-  saveToken(token: LoginResponse) {
-    localStorage.setItem('accessToken', token.accessToken);
-    localStorage.setItem('accessTokenExpires', token.accessTokenExpires);
+  saveToken(token: AuthToken) {
+    localStorage.setItem('token', JSON.stringify(token));
   }
   ngOnDestroy() {
     if (this.intervalId) {

@@ -2,7 +2,7 @@ import { Register } from './register/register';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../env/env.dev';
-import { LoginDto, LoginOtpDto, LoginResponse, RegisterDto } from './auth.interface';
+import { LoginDto, LoginOtpDto, AuthToken, RegisterDto } from './auth.interface';
 import { ApiResponse } from '../../core/interfaces/api.interface';
 import { Observable } from 'rxjs';
 
@@ -27,8 +27,8 @@ export class AuthService {
   loginRequest(loginDto: LoginDto): Observable<ApiResponse<string>> {
     return this.http.post<ApiResponse<string>>(`${this.url}/login-request`, loginDto);
   }
-  emailOtpLogin(otpDto: LoginOtpDto): Observable<ApiResponse<LoginResponse>> {
-    return this.http.post<ApiResponse<LoginResponse>>(`${this.url}/email-otp-login`, otpDto);
+  emailOtpLogin(otpDto: LoginOtpDto): Observable<ApiResponse<AuthToken>> {
+    return this.http.post<ApiResponse<AuthToken>>(`${this.url}/email-otp-login`, otpDto);
   }
 
 

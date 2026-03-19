@@ -17,7 +17,6 @@ export class LoadingService {
 
   hide() {
     this.requestCount--;
-
     if (this.requestCount <= 0) {
       this.isLoading.set(false);
       this.requestCount = 0;

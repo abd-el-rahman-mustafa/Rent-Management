@@ -22,13 +22,13 @@ export class ErrorHandlerService {
     private normalize(error: HttpErrorResponse): ApiResponse<any> {
         if (error.status === 0) {
             // Status 0 = no internet / CORS / server completely down
-            return { statusCode: 0, data: '', title: 'No Internet Connection', details: 'No internet connection. Please try again.' };
+            return { statusCode: 0, data: '', title: 'No Internet Connection', detail: 'No internet connection. Please try again.' };
         }
 
         return {
             statusCode: error.status,
             data: 'null',
-            details: error.error?.message ?? error.message ?? 'Unexpected error',
+            detail: error.error?.detail ?? error.error?.message ?? error.message ?? 'Unexpected error',
             errors: error.error?.errors ?? null,
             title: error.error?.title ?? 'Error',
         }
@@ -51,7 +51,7 @@ export class ErrorHandlerService {
                 break;
 
             case 500:
-                this.toastr.error(error.details, error.title);
+                this.toastr.error(error.detail, error.title);
                 break;
         }
         // 400, 422, 500 — stay on the same page, let the component show the error
@@ -71,7 +71,7 @@ export class ErrorHandlerService {
             const messages = Object.values(error.errors).flat().join(' ');
             this.toastr.error(messages, error.title);
         } else {
-            this.toastr.error(error.details, error.title);
+            this.toastr.error(error.detail, error.title);
         }
     }
 }

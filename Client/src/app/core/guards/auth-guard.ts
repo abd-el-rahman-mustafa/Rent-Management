@@ -1,20 +1,20 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { AuthToken } from '../../pages/auth/auth.interface';
 
 export const authGuard: CanActivateFn = (route, state) => {
   // Implement your authentication logic here
   // inject Router to navigate to login page if not authenticated
   const router = inject(Router);
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('token');
   if (token) {
-    const tokenExpiration = localStorage.getItem('accessTokenExpires');
-    if (tokenExpiration) {
-      const expirationDate = new Date(tokenExpiration);
+    const tokenData : AuthToken= JSON.parse(token);
+    if (tokenData.accessTokenExpires) {
+      const expirationDate = new Date(tokenData.accessTokenExpires);
       if (expirationDate > new Date()) {
         return true; // Token is valid
       } else {
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('accessTokenExpires');
+        localStorage.removeItem('token');
         // Optionally, you can redirect the user to the login page here
         router.navigate(['/login']);
         return false; // Token has expired
@@ -32,14 +32,18 @@ export const authGuard: CanActivateFn = (route, state) => {
 // notAuthGuard to prevent authenticated users from accessing login and register pages
 export const notAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('token');
   if (token) {
-    const tokenExpiration = localStorage.getItem('accessTokenExpires');
-    if (tokenExpiration) {
-      const expirationDate = new Date(tokenExpiration);
-      if (expirationDate > new Date()) {
+    const tokenData: AuthToken = JSON.parse(token);
+    if (tokenData.accessTokenExpires) {
+      const accessTokenExpires = new Date(tokenData.accessTokenExpires);
+      if (accessTokenExpires > new Date()) {
         router.navigate(['/']); // Redirect to home page if authenticated
         return false; // User is authenticated, prevent access to this route
+      } else {
+        localStorage.removeItem('token');
+        router.navigate(['/login']);
+        return false; // Token has expired, prevent access to this route
       }
     }
   }

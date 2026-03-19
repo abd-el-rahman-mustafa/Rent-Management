@@ -91,14 +91,12 @@ export class Register implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log('Form Submitted successfully:', this.registerForm.value);
       const registerDto: RegisterDto = {
         ...this.registerForm.value
       };
 
       this.authService.register(registerDto).subscribe({
         next: (response) => {
-          console.log('Registration successful:', response);
         },
         error: (error) => {
           // this.toastr.error(error.error.message, 'Error');
