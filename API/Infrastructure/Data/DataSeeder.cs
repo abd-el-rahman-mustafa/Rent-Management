@@ -1,0 +1,74 @@
+using API.Domain.Constants;
+using API.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+
+namespace API.Infrastructure.Data;
+
+public static class DataSeeder
+{
+    public static async Task SeedAsync(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
+    {
+        await SeedRolesAsync(roleManager);
+        await SeedUsersAsync(userManager);
+    }
+
+    // ─── Roles ───────────────────────────────────────────────────────────────
+
+    private static async Task SeedRolesAsync(RoleManager<AppRole> roleManager)
+    {
+        var roles = new List<AppRole>
+        {
+            new AppRole
+            {
+                Name        = Roles.Admin,
+                NameAr      = "مدير",
+                DescriptionEn = "Full access to all system features.",
+                DescriptionAr = "وصول كامل إلى جميع ميزات النظام."
+            },
+            // Other roles can be added here in the future, such as "Manager" or "Support"
+            
+        };
+
+        foreach (var role in roles)
+        {
+            if (!await roleManager.RoleExistsAsync(role.Name!))
+                await roleManager.CreateAsync(role);
+        }
+    }
+
+    // ─── Users ────────────────────────────────────────────────────────────────
+
+    private static async Task SeedUsersAsync(UserManager<AppUser> userManager)
+    {
+        var now = DateTimeOffset.UtcNow;
+
+        var seedUsers = new List<(AppUser User, string Password, string Role)>
+        {
+            (
+                new AppUser
+                {
+                    UserName  = "admin",
+                    Email     = "aamus2024@gmail.com",
+                    FirstName = "System",
+                    LastName  = "Admin",
+                    Gender    = Gender.Male,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    IsActive  = true
+                },
+                "Admin@1234",
+                Roles.Admin
+            )
+        };
+
+        foreach (var (user, password, role) in seedUsers)
+        {
+            if (await userManager.FindByEmailAsync(user.Email!) is null)
+            {
+                var result = await userManager.CreateAsync(user, password);
+                if (result.Succeeded)
+                    await userManager.AddToRoleAsync(user, role);
+            }
+        }
+    }
+}
