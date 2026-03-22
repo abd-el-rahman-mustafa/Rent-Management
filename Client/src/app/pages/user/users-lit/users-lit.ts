@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './users-lit.css',
 })
 export class UsersLit {
+
+  
+
+  constructor(private authService: AuthService) {
+  }
+
+
+
+
 
 }
