@@ -27,4 +27,18 @@ public class UserService : IUserService
 
         return users;
     }
+
+    public async Task<simpleUserInfoDto> GetUserByIdAsync(int id)
+    {
+        var user = await _userManager.Users.Where(u => u.Id == id).Select(u => new simpleUserInfoDto
+        {
+            Id = u.Id,
+            FirstName = u.FirstName,
+            LastName = u.LastName,
+            Email = u.Email,
+        }).FirstOrDefaultAsync();
+
+        return user;
+    }
+
 }

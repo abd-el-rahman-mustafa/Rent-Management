@@ -24,4 +24,16 @@ public class UserController : ControllerBase
         var users = await _userService.GetUsersAsync();
         return Ok(users);
     }
+
+    [HttpGet("{id}")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<ActionResult<simpleUserInfoDto>> GetUserById(int id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+        if (user == null)
+        {
+            return NotFound();
+        }
+        return Ok(user);
+    }
 }
