@@ -1,6 +1,6 @@
 import { Register } from './register/register';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../env/env.dev';
 import { LoginDto, LoginOtpDto, AuthToken, RegisterDto } from './auth.interface';
 import { ApiResponse } from '../../core/interfaces/api.interface';
@@ -12,9 +12,8 @@ import { Observable } from 'rxjs';
 export class AuthService {
 
   url = environment.API_URL + 'auth';
+  http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {
-  }
 
   sendOtp(email: string) {
     return this.http.post(`${this.url}/send-email-otp`, { email });
