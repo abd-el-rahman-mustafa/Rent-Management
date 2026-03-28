@@ -1,5 +1,6 @@
+import { UserService } from './../user.service';
 import { AuthService } from './../../auth/auth.service';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-users-lit',
@@ -7,11 +8,20 @@ import { Component } from '@angular/core';
   templateUrl: './users-lit.html',
   styleUrl: './users-lit.css',
 })
-export class UsersLit {
+export class UsersLit implements OnInit {
 
-  
+  UserService = inject(UserService);
 
-  constructor(private authService: AuthService) {
+  ngOnInit() {
+    this.getAllUsers();
+  }
+
+
+  getAllUsers() {
+    this.UserService.getAllUsers().subscribe((res) => {
+      console.log(res);
+    });
+
   }
 
 
