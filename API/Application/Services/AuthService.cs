@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using API.Application.Interfaces;
 using API.Application.Common;
+using API.Infrastructure.Data;
 
 namespace API.Application.Services;
 
@@ -11,15 +12,17 @@ public class AuthService : IAuthService
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly IOtpService _otpService;
-    private readonly IEmailService emailService;
+    private readonly IEmailService _emailService;
     private readonly IJwtService _jwtService;
+    private readonly DataContext _dbContext;
 
-    public AuthService(UserManager<AppUser> userManager, IOtpService otpService, IEmailService emailService, IJwtService jwtService)
+    public AuthService(UserManager<AppUser> userManager, IOtpService otpService, IEmailService emailService, IJwtService jwtService, DataContext dbContext)
     {
         _userManager = userManager;
         _otpService = otpService;
         _jwtService = jwtService;
-        this.emailService = emailService;
+        _emailService = emailService;
+        _dbContext = dbContext;
     }
 
     // -------------------------------------------------------------------------
@@ -103,7 +106,7 @@ public class AuthService : IAuthService
         // send OTP to email for 2FA
         var code = await _otpService.GenerateOtpAsync(user.Email, OtpType.LoginEmail);
 
-        await emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {code}");
+        await _emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {code}");
         return ServiceResult<string>.Success(
             data: "OTP Sent",
             title: "Success",
@@ -117,14 +120,16 @@ public class AuthService : IAuthService
 
     public async Task<ServiceResult<TokenResponseDto>> EmailOtpLoginAsync(EmailOtpLoginDto loginDto)
     {
-        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        var user = await _dbContext.Users
+                        .Include(u => u.UserRoles)
+                        .ThenInclude(ur => ur.Role)
+                        .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
         if (user == null)
             return ServiceResult<TokenResponseDto>.Failure(
                 title: "Invalid Credentials",
                 detail: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
             );
-
         var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.Otp);
         if (!valid)
             return ServiceResult<TokenResponseDto>.Failure(
@@ -172,7 +177,7 @@ public class AuthService : IAuthService
 
         var code = await _otpService.GenerateOtpAsync(dto.Email, otpType);
 
-        await emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
+        await _emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
 
         return ServiceResult<bool>.Success(
             data: true,

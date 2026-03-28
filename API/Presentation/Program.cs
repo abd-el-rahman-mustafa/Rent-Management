@@ -36,8 +36,8 @@ builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
-// Seed roles and users
-await app.SeedDatabaseAsync();
+// Initialize the database with seed data
+await app.InitializeDB();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

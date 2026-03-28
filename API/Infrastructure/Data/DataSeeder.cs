@@ -60,15 +60,18 @@ public static class DataSeeder
                 Roles.Admin
             )
         };
-
+        Console.WriteLine("Seeding users...");
         foreach (var (user, password, role) in seedUsers)
         {
             if (await userManager.FindByEmailAsync(user.Email!) is null)
             {
                 var result = await userManager.CreateAsync(user, password);
+                Console.WriteLine($"Creating user {user.Email}: {(result.Succeeded ? "Success" : "Failed")}");
                 if (result.Succeeded)
                     await userManager.AddToRoleAsync(user, role);
+                Console.WriteLine($"Assigning role '{role}' to user {user.Email}: Success");
             }
         }
+        Console.WriteLine("User seeding completed.");
     }
 }

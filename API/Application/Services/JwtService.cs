@@ -22,8 +22,6 @@ public class JwtService : IJwtService
     {
         try
         {
-
-
             // Steps 
             // 1. Create claims based on user information
             var claims = new List<Claim>
@@ -35,7 +33,8 @@ public class JwtService : IJwtService
             // Add role claims if the user has any roles
             var userRoles = user.UserRoles.Select(ur => ur.Role.Name).ToArray();
 
-            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+            Console.WriteLine($"User Roles: {string.Join(", ", userRoles)}");
+            claims.AddRange(userRoles.Select(role => new Claim("roles", role)));
 
             // 2. Create signing credentials using the secret key
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.SecretKey));
