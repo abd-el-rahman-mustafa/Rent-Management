@@ -5,9 +5,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormInput } from '../../../shared/components/input/input';
 import { ToastrService } from 'ngx-toastr';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
-import { LoginDto, LoginOtpDto, AuthToken, RegisterDto } from '../auth.interface';
+import { LoginDto, LoginOtpDto, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { Router } from '@angular/router';
+import { AuthToken } from '../../../core/interfaces/api.interface';
 
 @Component({
   selector: 'app-login',

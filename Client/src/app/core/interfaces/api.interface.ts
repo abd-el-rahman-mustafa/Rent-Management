@@ -7,3 +7,7 @@ export interface ApiResponse<T> {
     errors?: Record<string, string[]>; // validation errors from backend
 }
 
+export interface AuthToken {
+    accessToken: string;
+    accessTokenExpires: string; // ISO string
+}
