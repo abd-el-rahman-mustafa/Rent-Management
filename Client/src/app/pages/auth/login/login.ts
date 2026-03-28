@@ -1,3 +1,4 @@
+import { TokenService } from './../../../core/services/token.service';
 import { AuthService } from './../auth.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
@@ -26,6 +27,7 @@ export class Login {
 
   toastr = inject(ToastrService);
   router = inject(Router);
+  tokenService = inject(TokenService);
   /**
    *
    */
@@ -69,7 +71,7 @@ export class Login {
       this.authService.loginRequest(loginDto).subscribe({
         next: (response) => {
           this.toastr.success(response.detail, response.title);
-          console.log( response.detail);
+          console.log(response.detail);
           this.otpSent = true;
           this.startCountdown();
         }
@@ -89,7 +91,7 @@ export class Login {
       this.authService.emailOtpLogin(otpDto).subscribe({
         next: (response) => {
           this.toastr.success(response.detail, response.title);
-          this.saveToken(response.data);
+          this.tokenService.setToken(response.data);
 
           // navigate to home page or dashboard
           this.router.navigate(['/']);
@@ -114,9 +116,7 @@ export class Login {
       },
     });
   }
-  saveToken(token: AuthToken) {
-    localStorage.setItem('token', JSON.stringify(token));
-  }
+
   ngOnDestroy() {
     if (this.intervalId) {
       clearInterval(this.intervalId);

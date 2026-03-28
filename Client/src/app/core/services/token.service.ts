@@ -8,10 +8,6 @@ import { AuthToken } from '../interfaces/api.interface';
     providedIn: 'root'
 })
 export class TokenService {
-    private TOKEN_KEY: AuthToken = {
-        accessToken: '',
-        accessTokenExpires: ''
-    };
 
     setToken(token: AuthToken) {
         localStorage.setItem('token', JSON.stringify(token));

@@ -2,8 +2,8 @@ import { Register } from './register/register';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../env/env.dev';
-import { LoginDto, LoginOtpDto, AuthToken, RegisterDto } from './auth.interface';
-import { ApiResponse } from '../../core/interfaces/api.interface';
+import { LoginDto, LoginOtpDto, RegisterDto } from './auth.interface';
+import { ApiResponse, AuthToken } from '../../core/interfaces/api.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({

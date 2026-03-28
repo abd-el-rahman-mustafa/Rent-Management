@@ -3,11 +3,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ApiResponse } from '../interfaces/api.interface';
 import { ToastrService } from 'ngx-toastr';
+import { TokenService } from './token.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandlerService {
     private router = inject(Router);
     private toastr = inject(ToastrService);
+    private tokenService = inject(TokenService);
 
     handle(apiError: HttpErrorResponse): ApiResponse<any> {
         const normalizedError = this.normalize(apiError);
@@ -37,7 +39,7 @@ export class ErrorHandlerService {
     private action(error: ApiResponse<any>): void {
         switch (error.statusCode) {
             case 401:
-                localStorage.removeItem('token');
+                this.tokenService.removeToken();
                 this.router.navigate(['/login']);
                 break;
             case 403:
