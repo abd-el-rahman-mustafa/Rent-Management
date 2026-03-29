@@ -1,15 +1,23 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { Lang } from '../interfaces/language.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
+
+  platformId = inject(PLATFORM_ID);
+
   lang = signal<Lang>(
-    (localStorage.getItem('lang') as Lang) ?? 'en'
+    isPlatformBrowser(this.platformId)
+      ? (localStorage.getItem('lang') as Lang) ?? 'ar'
+      : 'ar'
   );
 
   setLang(lang: Lang) {
     this.lang.set(lang);
     localStorage.setItem('lang', lang);
-    document.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    if (isPlatformBrowser(this.platformId)) {
+      document.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    }
   }
 }
