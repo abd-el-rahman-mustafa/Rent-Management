@@ -7,10 +7,11 @@ import { AuthService } from '../auth.service';
 import { RegisterDto } from '../auth.interface';
 import { otpValidator, passwordValidator } from '../../../shared/validators/validators';
 import { ToastrService } from 'ngx-toastr';
+import { LangRouterLinkDirective } from '../../../core/directives/lang-router-link.directive';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, FormInput, Countdown],
+  imports: [CommonModule, ReactiveFormsModule, FormInput, Countdown,LangRouterLinkDirective],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
