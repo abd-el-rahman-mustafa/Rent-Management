@@ -10,6 +10,7 @@ import { LoginDto, LoginOtpDto, RegisterDto } from '../auth.interface';
 import { Countdown } from '../../../shared/pipelines/countdown-pipe';
 import { Router } from '@angular/router';
 import { AuthToken } from '../../../core/interfaces/api.interface';
+import { BaseComponent } from '../../../core/components/base-component/base-component';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,9 @@ import { AuthToken } from '../../../core/interfaces/api.interface';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+//inherit from base component to get the language support
+
+export class Login extends BaseComponent {
   requestForm: FormGroup = new FormGroup({});
   otpLoginForm: FormGroup = new FormGroup({});
 
@@ -34,10 +37,14 @@ export class Login {
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-  ) { }
+  ) {
+    super();
+
+  }
 
   ngOnInit(): void {
     this.initializeForm();
+
   }
   initializeForm() {
     this.requestForm = this.fb.nonNullable.group({

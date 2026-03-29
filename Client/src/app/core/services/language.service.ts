@@ -1,7 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Lang } from '../interfaces/language.interface';
 
-
 @Injectable({ providedIn: 'root' })
 export class LanguageService {
   lang = signal<Lang>(
