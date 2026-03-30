@@ -24,7 +24,7 @@ public class AuthController : ControllerBase
             var authResponse = await _authService.RegisterAsync(registerDto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
-                    : Problem(detail: authResponse.Detail, statusCode: authResponse.StatusCode);
+                    : Problem(title: authResponse.Title, detail: authResponse.Detail, statusCode: authResponse.StatusCode);
 
         }
         catch (InvalidOperationException ex)
@@ -41,7 +41,7 @@ public class AuthController : ControllerBase
             var authResponse = await _authService.loginRequestAsync(loginDto);
             return authResponse.IsSuccess
                     ? Ok(authResponse)
-                    : Problem(detail: authResponse.Detail, statusCode: authResponse.StatusCode);
+                    : Problem(title: authResponse.Title, detail: authResponse.Detail, statusCode: authResponse.StatusCode);
         }
         catch (InvalidOperationException ex)
         {
@@ -76,10 +76,11 @@ public class AuthController : ControllerBase
                     ? Ok(result)
                     : Problem(detail: result.Detail, statusCode: result.StatusCode);
         }
-        catch (InvalidOperationException ex)
+        catch (Exception ex)
         {
             return Problem(detail: ex.Message, statusCode: StatusCodes.Status500InternalServerError);
         }
+
     }
 
     // Phone OTP

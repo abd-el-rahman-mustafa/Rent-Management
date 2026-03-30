@@ -114,6 +114,7 @@ export class Login extends BaseComponent {
     this.authService.loginRequest(loginDto).subscribe({
       next: (response) => {
         this.toastr.success(response.detail, response.title);
+        console.log(response.detail);
         this.startCountdown();
       },
       error: (error) => {

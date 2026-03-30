@@ -32,18 +32,26 @@ public class AuthService : IAuthService
     {
 
         // verify email otp
-        var emailOtpValid = await _otpService.ValidateOtpAsync(
+        var validateResult = await _otpService.ValidateOtpAsync(
             identifier: registerDto.Email,
             otpType: OtpType.RegisterEmail,
             otpCode: registerDto.EmailOtpCode
         );
 
-        if (!emailOtpValid)
-            throw new InvalidOperationException("Invalid or expired email OTP code.");
+        if (!validateResult.IsSuccess)
+            return ServiceResult<AuthResponseDto>.Failure(
+                title: validateResult.Title,
+                detail: validateResult.Detail,
+                statusCode: validateResult.StatusCode
+            );
 
         // verify that email is unique (not already taken by another user)
         if (await _userManager.FindByEmailAsync(registerDto.Email) != null)
-            throw new InvalidOperationException("An account with that email address already exists.");
+            return ServiceResult<AuthResponseDto>.Failure(
+                title: "Email Already In Use",
+                detail: "An account with that email address already exists.",
+                statusCode: StatusCodes.Status409Conflict
+            );
 
         var user = new AppUser
         {
@@ -104,14 +112,21 @@ public class AuthService : IAuthService
             );
 
         // send OTP to email for 2FA
-        var code = await _otpService.GenerateOtpAsync(user.Email, OtpType.LoginEmail);
+        var generateResult = await _otpService.GenerateOtpAsync(user.Email, OtpType.LoginEmail);
 
-        await _emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {code}");
+        if (!generateResult.IsSuccess)
+            return ServiceResult<string>.Failure(
+                title: generateResult.Title,
+                detail: generateResult.Detail,
+                statusCode: generateResult.StatusCode
+            );
+
+        await _emailService.SendAsync(user.Email, "Your login verification code", $"Your OTP is: {generateResult.Data}");
         return ServiceResult<string>.Success(
             data: "OTP Sent",
             title: "Success",
 #if DEBUG
-            detail: $"Login OTP Sent , Your OTP is: {code}"
+            detail: $"Login OTP Sent , Your OTP is: {generateResult.Data}"
 #else
             detail: "Login OTP Sent to your email address."
 #endif
@@ -130,12 +145,12 @@ public class AuthService : IAuthService
                 detail: "No account found with that email address.",
                 statusCode: StatusCodes.Status404NotFound
             );
-        var valid = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.Otp);
-        if (!valid)
+        var validateResult = await _otpService.ValidateOtpAsync(loginDto.Email, OtpType.LoginEmail, loginDto.Otp);
+        if (!validateResult.IsSuccess)
             return ServiceResult<TokenResponseDto>.Failure(
-                title: "Invalid OTP",
-                detail: "The provided OTP code is invalid or has expired.",
-                statusCode: StatusCodes.Status400BadRequest
+                title: validateResult.Title,
+                detail: validateResult.Detail,
+                statusCode: validateResult.StatusCode
             );
         // For now, we'll assume the OTP is valid and proceed with login
 
@@ -175,9 +190,16 @@ public class AuthService : IAuthService
 
         }
 
-        var code = await _otpService.GenerateOtpAsync(dto.Email, otpType);
+        var generateResult = await _otpService.GenerateOtpAsync(dto.Email, otpType);
 
-        await _emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {code}");
+        if (!generateResult.IsSuccess)
+            return ServiceResult<bool>.Failure(
+                title: generateResult.Title,
+                detail: generateResult.Detail,
+                statusCode: generateResult.StatusCode
+            );
+
+        await _emailService.SendAsync(dto.Email, "Your verification code", $"Your OTP is: {generateResult.Data}");
 
         return ServiceResult<bool>.Success(
             data: true,
@@ -197,12 +219,12 @@ public class AuthService : IAuthService
             );
 
 
-        var valid = await _otpService.ValidateOtpAsync(dto.Email, otpType, dto.Otp);
-        if (!valid)
+        var validateResult = await _otpService.ValidateOtpAsync(dto.Email, otpType, dto.Otp);
+        if (!validateResult.IsSuccess)
             return ServiceResult<bool>.Failure(
-                title: "Invalid OTP",
-                detail: "The provided OTP code is invalid or has expired.",
-                statusCode: StatusCodes.Status400BadRequest
+                title: validateResult.Title,
+                detail: validateResult.Detail,
+                statusCode: validateResult.StatusCode
             );
 
         // Mark the email as confirmed in ASP.NET Identity
@@ -266,12 +288,12 @@ public class AuthService : IAuthService
             );
 
 
-        var valid = await _otpService.ValidateOtpAsync(dto.PhoneNumber, otpType, dto.Otp);
-        if (!valid)
+        var validateResult = await _otpService.ValidateOtpAsync(dto.PhoneNumber, otpType, dto.Otp);
+        if (!validateResult.IsSuccess)
             return ServiceResult<bool>.Failure(
-                title: "Invalid OTP",
-                detail: "The provided OTP code is invalid or has expired.",
-                statusCode: StatusCodes.Status400BadRequest
+                title: validateResult.Title,
+                detail: validateResult.Detail,
+                statusCode: validateResult.StatusCode
             );
 
         // Mark the phone number as confirmed in ASP.NET Identity

@@ -51,10 +51,13 @@ export class ErrorHandlerService {
             case 400:
                 this.normalizeValidationErrors(error);
                 break;
-
-            case 500:
+            case 429: // Too Many Requests
+            case 500: // Server error
                 this.toastr.error(error.detail, error.title);
                 break;
+
+            default:
+                this.toastr.error(error.detail, error.title);
         }
         // 400, 422, 500 — stay on the same page, let the component show the error
     }
