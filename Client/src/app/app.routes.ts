@@ -5,6 +5,8 @@ import { MainPage } from './pages/main-page/main-page';
 import { authGuard, notAuthGuard } from './core/guards/auth.guard';
 import { UsersLit } from './pages/user/users-lit/users-lit';
 import { langGuard } from './core/guards/lang.guard';
+import { redirectToLangGuard } from './core/guards/redirect-to-lang.guard';
+
 
 export const routes: Routes = [
   {
@@ -21,11 +23,12 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'ar', // default language
-    pathMatch: 'full'
+    canActivate: [redirectToLangGuard],
+    children: [] // Redirect any unknown paths to the default language route
   },
   {
     path: '**',
-    redirectTo: 'ar'
+    canActivate: [redirectToLangGuard],
+    children: [] // Redirect any unknown paths to the default language route
   }
 ];
