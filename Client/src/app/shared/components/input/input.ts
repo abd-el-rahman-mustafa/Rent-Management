@@ -23,6 +23,14 @@ export class FormInput implements ControlValueAccessor {
   // inject language service to get current language
   lang = inject(LanguageService).lang();
 
+  placeholderDir = computed(() => {
+    const text = this.placeholder();
+    if (!text) return 'ltr';
+    // check if first meaningful character is arabic/hebrew/etc
+    const firstChar = text.trim()[0];
+    return /[\u0591-\u07FF\uFB1D-\uFDFD\uFE70-\uFEFF]/.test(firstChar) ? 'rtl' : 'ltr';
+  });
+
   constructor(@Self() @Optional() public ngControl: NgControl) {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
