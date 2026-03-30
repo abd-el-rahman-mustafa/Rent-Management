@@ -1,26 +1,26 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
     <div>
-      <h2 class="mt-2 text-center text-3xl font-extrabold text-indigo-700">Register</h2>
-      <p class="mt-2 text-center text-sm text-gray-600">Create your new account</p>
+      <h2 class="mt-2 text-center text-3xl font-extrabold text-indigo-700">{{ lang() == 'en' ? 'Register' : 'تسجيل حساب جديد' }}</h2>
+      <p class="mt-2 text-center text-sm text-gray-600">{{ lang() == 'en' ? 'Create your new account' : 'أنشئ حسابك الجديد' }}</p>
     </div>
 
     <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div>
-            <app-input label="First Name" type="text" formControlName="firstName">
+            <app-input label="{{ lang() == 'en' ? 'First Name' : 'الاسم الأول' }}" type="text" formControlName="firstName">
             </app-input>
           </div>
 
           <div>
-            <app-input label="Last Name" type="text" formControlName="lastName">
+            <app-input label="{{ lang() == 'en' ? 'Last Name' : 'الاسم الأخير' }}" type="text" formControlName="lastName">
             </app-input>
           </div>
         </div>
 
         <div>
-          <app-input label="Email Address" type="email" formControlName="email">
+          <app-input label="{{ lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني' }}" type="email" formControlName="email">
           </app-input>
         </div>
 
@@ -28,7 +28,7 @@
         <div class="p-4 bg-gray-50 border rounded-lg space-y-4">
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">OTP Code <span
+              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">{{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }} <span
                   class="text-red-500">*</span></label>
               @if(otpCountdown > 0){
 
@@ -40,21 +40,21 @@
               }@else {
               <button type="button" (click)="sendOtp()"
                 class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-500 cursor-pointer hover:text-indigo-700">
-                Send OTP Again
+                {{ lang() == 'en' ? 'Resend' : 'إعادة الإرسال' }}
               </button>
               }
             </div>
-            <app-input type="number" formControlName="emailOtpCode" placeholder="Enter the OTP sent to your email">
+            <app-input type="number" formControlName="emailOtpCode" [placeholder]="lang() == 'en' ? 'Enter the OTP sent to your email' : 'أدخل الرمز المرسل إلى بريدك الإلكتروني'">
             </app-input>
           </div>
 
           <div>
-            <app-input label="Password" type="password" formControlName="password">
+            <app-input [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'" type="password" formControlName="password">
             </app-input>
           </div>
 
           <div>
-            <app-input label="Confirm Password" type="password" formControlName="confirmPassword">
+            <app-input [label]="lang() == 'en' ? 'Confirm Password' : 'تأكيد كلمة المرور'" type="password" formControlName="confirmPassword">
             </app-input>
           </div>
         </div>
@@ -69,14 +69,14 @@
             }@else {
             <button type="button" (click)="sendOtp()"
               class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-              Send OTP
+              {{ lang() == 'en' ? 'Send OTP' : 'إرسال رمز OTP' }}
             </button>
             }
       </div>
 
       <div class="text-center mt-4">
         <a [routerLink]="['login']" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-          Already have an account? Log in
+          {{ lang() == 'en' ? 'Already have an account? Log In' : 'هل لديك حساب بالفعل؟ سجل الدخول' }}
         </a>
       </div>
     </form>
