@@ -1,0 +1,4 @@
+input::placeholder {
+  direction: var(--placeholder-dir, ltr);
+  unicode-bidi: plaintext;
+}
