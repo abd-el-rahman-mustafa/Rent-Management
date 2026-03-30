@@ -1,7 +1,8 @@
-import { Component, input, OnDestroy, OnInit, signal, forwardRef, Self, computed, Optional } from '@angular/core';
+import { Component, input, OnDestroy, OnInit, signal, forwardRef, Self, computed, Optional, inject } from '@angular/core';
 import { InputType } from '../../interfaces/input.interface';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
 import { KeyValuePipe } from '@angular/common';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-input',
@@ -18,6 +19,9 @@ export class FormInput implements ControlValueAccessor {
   errorMsg: string = '';
   value: string = '';
   disabled: boolean = false;
+
+  // inject language service to get current language
+  lang = inject(LanguageService).lang();
 
   constructor(@Self() @Optional() public ngControl: NgControl) {
     if (this.ngControl) {
@@ -58,14 +62,21 @@ export class FormInput implements ControlValueAccessor {
 
   getErrorMessage(key: string, value: any): string {
 
-    const errorMessages: { [key: string]: string } = {
+    const enErrorMessages: { [key: string]: string } = {
       required: 'This field is required',
       email: 'Invalid email address',
       password: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character and be greater or equal to 8 characters long',
       onlyNumbers: 'Only numbers are allowed',
       otp: 'OTP must be a 6-digit number'
     };
+    const arErrorMessages: { [key: string]: string } = {
+      required: 'هذا الحقل مطلوب',
+      email: 'عنوان البريد الإلكتروني غير صالح',
+      password: 'يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل، حرف صغير واحد، رقم واحد، وحرف خاص واحد وأن تكون 8 أحرف أو أكثر',
+      onlyNumbers: 'يسمح بالأرقام فقط',
+      otp: 'يجب أن يكون OTP رقمًا مكونًا من 6 أرقام'
+    };
+    return (this.lang === 'en' ? enErrorMessages[key] : arErrorMessages[key]) || 'Invalid field';
 
-    return errorMessages[key] || 'Invalid field';
   }
 }
