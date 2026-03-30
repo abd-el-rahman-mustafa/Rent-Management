@@ -2,9 +2,8 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { LanguageService } from '../services/language.service';
-import { Lang } from '../interfaces/language.interface';
+import { Lang, SUPPORTED_LANGS } from '../interfaces/language.interface';
 
-const SUPPORTED_LANGS: Lang[] = ['ar', 'en'];
 
 export const langGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
