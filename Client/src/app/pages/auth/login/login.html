@@ -6,85 +6,69 @@
       </h2>
       <p class="mt-2 text-center text-sm text-gray-600">
         {{
-          lang() == 'en'
-            ? 'Enter your credentials to access your account'
-            : 'أدخل بيانات الاعتماد للوصول إلى حسابك'
+        lang() == 'en'
+        ? 'Enter your credentials to access your account'
+        : 'أدخل بيانات الاعتماد للوصول إلى حسابك'
         }}
       </p>
     </div>
     @if (!otpSent) {
-      <form class="mt-8 space-y-6" [formGroup]="requestForm" (ngSubmit)="sendLoginRequest()">
-        <div class="space-y-4">
-          <div>
-            <app-input label="Email Address" type="email" formControlName="email"> </app-input>
-          </div>
-          <div>
-            <app-input label="Password" type="password" formControlName="password"> </app-input>
-          </div>
-
-          <button
-            type="submit"
-            [disabled]="requestForm.invalid"
-            class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-          >
-            {{ lang() == 'en' ? 'Log In' : 'تسجيل الدخول' }}
-          </button>
-
-          <div class="text-center mt-4">
-            <a
-              [routerLink]="['register']"
-              class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-            >
-              {{ lang() == 'en' ? "Don't have an account? Sign Up" : 'ليس لديك حساب؟ سجل' }}
-            </a>
-          </div>
+    <form class="mt-8 space-y-6" [formGroup]="requestForm" (ngSubmit)="sendLoginRequest()">
+      <div class="space-y-4">
+        <div>
+          <app-input [label]="lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني'" type="email"
+            formControlName="email"> </app-input>
         </div>
-      </form>
+        <div>
+          <app-input [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'" type="password" formControlName="password">
+          </app-input>
+        </div>
+
+        <button type="submit" [disabled]="requestForm.invalid"
+          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+          {{ lang() == 'en' ? 'Log In' : 'تسجيل الدخول' }}
+        </button>
+
+        <div class="text-center mt-4">
+          <a [routerLink]="['register']" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+            {{ lang() == 'en' ? "Don't have an account? Sign Up" : 'ليس لديك حساب؟ سجل' }}
+          </a>
+        </div>
+      </div>
+    </form>
     } @else {
-      <form class="mt-8 space-y-6" [formGroup]="otpLoginForm" (ngSubmit)="verifyOtp()">
-        <div class="space-y-4">
-          <div>
-            <div class="flex justify-between items-center mb-1">
-              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">
-                {{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }}
-                <span class="text-red-500">*</span>
-              </label>
-              @if (otpCountdown > 0) {
-                <span
-                  class="text-xs font-bold px-2 py-1 rounded-full"
-                  [ngClass]="
+    <form class="mt-8 space-y-6" [formGroup]="otpLoginForm" (ngSubmit)="verifyOtp()">
+      <div class="space-y-4">
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">
+              {{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }}
+              <span class="text-red-500">*</span>
+            </label>
+            @if (otpCountdown > 0) {
+            <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
                     otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-                  "
-                >
-                  {{ otpCountdown | countdown }}
-                </span>
-              } @else {
-                <button
-                  type="button"
-                  (click)="reSendOtp()"
-                  class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-500 cursor-pointer hover:text-indigo-700"
-                >
-                  {{ lang() == 'en' ? 'Send OTP Again' : 'أرسل رمز OTP مرة أخرى' }}
-                </button>
-              }
-            </div>
-            <app-input
-              type="number"
-              formControlName="otp"
-              placeholder="Enter the OTP sent to your email"
-            >
-            </app-input>
+                  ">
+              {{ otpCountdown | countdown }}
+            </span>
+            } @else {
+            <button type="button" (click)="reSendOtp()"
+              class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-500 cursor-pointer hover:text-indigo-700">
+              {{ lang() == 'en' ? 'Resend' : 'إعادة الإرسال' }}
+            </button>
+            }
           </div>
-
-          <button
-            type="submit"
-            [disabled]="otpLoginForm.invalid"
-            class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-          >
-            {{ lang() == 'en' ? 'Verify OTP' : 'تحقق من OTP' }}
-          </button>
+          <app-input type="number" formControlName="otp"
+            [placeholder]="lang() == 'en' ? 'Enter the OTP' : 'ادخل الرمز المرسل الى بريدك الإلكتروني'">
+          </app-input>
         </div>
-      </form>
+
+        <button type="submit" [disabled]="otpLoginForm.invalid"
+          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+          {{ lang() == 'en' ? 'Verify ' : 'تحقق ' }}
+        </button>
+      </div>
+    </form>
     }
   </div>
 </div>
