@@ -15,7 +15,7 @@ export class ErrorHandlerService {
         const normalizedError = this.normalize(apiError);
 
         this.action(normalizedError);
-        this.log(normalizedError);
+        // this.log(normalizedError);
 
         return normalizedError; // return so components can use it too
     }

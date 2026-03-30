@@ -19,7 +19,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       delay: (error: HttpErrorResponse, attempt) => {
         const retryable = [0, 503, 504];
         if (!retryable.includes(error.status)) {
-          throwError(() => error); // give up immediately
+          return throwError(() => error); // give up immediately
         }
         // Exponential backoff: 1s, 2s, 4s...
         return timer(1000 * Math.pow(2, attempt - 1));
@@ -34,6 +34,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
     // ── CLEANUP ───────────────────────────────────────────────
     // finalize ALWAYS runs — whether success, error, or unsubscribe
-    finalize(() => {})
+    finalize(() => { })
   );
 };
