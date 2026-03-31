@@ -6,9 +6,8 @@ using API.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[ApiController]
-[Route("api/[controller]")]
-public class UserController : ControllerBase
+
+public class UserController : BaseController
 {
     private readonly IUserService _userService;
 
