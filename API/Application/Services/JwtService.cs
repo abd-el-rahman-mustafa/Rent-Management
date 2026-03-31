@@ -13,10 +13,11 @@ using System.Text;
 public class JwtService : IJwtService
 {
     private readonly JwtSettings _tokenSettings;
-
-    public JwtService(IOptions<JwtSettings> tokenSettings)
+    private readonly string Language;
+    public JwtService(IOptions<JwtSettings> tokenSettings, IRequestContext requestContext)
     {
         _tokenSettings = tokenSettings.Value;
+        Language = requestContext.Language;
     }
     public async Task<ServiceResult<TokenResponseDto>> GenerateTokenAsync(AppUser user)
     {
@@ -62,18 +63,18 @@ public class JwtService : IJwtService
             // 4. Return the token and its expiration time
 
             return ServiceResult<TokenResponseDto>.Success(
-                response,
-                "Token Generated",
-                "JWT token generated successfully."
+                data: response,
+                title: Language == "ar" ? "تم إنشاء الرمز" : "Token Generated",
+                detail: Language == "ar" ? "تم إنشاء رمز JWT بنجاح." : "JWT token generated successfully."
             );
         }
         catch (Exception ex)
         {
             // Log the exception (not implemented here)
             return ServiceResult<TokenResponseDto>.Failure(
-                "Token Generation Failed",
-                $"An error occurred while generating the token: {ex.Message}",
-                StatusCodes.Status500InternalServerError
+                title: Language == "ar" ? "فشل إنشاء الرمز" : "Token Generation Failed",
+                detail: Language == "ar" ? $"حدث خطأ أثناء إنشاء الرمز: {ex.Message}" : $"An error occurred while generating the token: {ex.Message}",
+                statusCode: StatusCodes.Status500InternalServerError
             );
         }
 
