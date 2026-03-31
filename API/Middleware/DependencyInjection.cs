@@ -29,6 +29,7 @@ public static class DependencyInjection
 
 
         // Register RequestContext for accessing request-specific data
+        services.AddHttpContextAccessor();
         services.AddScoped<IRequestContext, RequestContext>();
 
         return services;
