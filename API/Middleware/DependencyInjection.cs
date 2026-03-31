@@ -27,6 +27,10 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IUserService, UserService>();
 
+
+        // Register RequestContext for accessing request-specific data
+        services.AddScoped<IRequestContext, RequestContext>();
+
         return services;
     }
 }
