@@ -17,10 +17,12 @@ public class OtpService : IOtpService
 
 
     private readonly DataContext _context;
+    private readonly string Language;
 
-    public OtpService(DataContext context)
+    public OtpService(DataContext context, IRequestContext requestContext)
     {
         _context = context;
+        Language = requestContext.Language;
     }
 
     /// <inheritdoc/>
@@ -36,7 +38,11 @@ public class OtpService : IOtpService
 
         // check if the user can request a new OTP (e.g. not too soon after the last one)
         if (!await CanRequestOtpAsync(identifier, type))
-            return ServiceResult<string>.Failure("Too Many Requests", "Please wait before requesting a new OTP.", StatusCodes.Status429TooManyRequests);
+            return ServiceResult<string>.Failure(
+                title: Language == "ar" ? "طلبات كثيرة" : "Too Many Requests",
+                detail: Language == "ar" ? "يرجى الانتظار قبل طلب OTP جديد." : "Please wait before requesting a new OTP.",
+                statusCode: StatusCodes.Status429TooManyRequests
+                );
 
 
         // Generate a cryptographically random 6-digit code
@@ -54,7 +60,11 @@ public class OtpService : IOtpService
         _context.OtpRecords.Add(record);
         await _context.SaveChangesAsync();
 
-        return ServiceResult<string>.Success(code, "OTP Generated", "A new OTP code has been generated and is valid for a limited time.");
+        return ServiceResult<string>.Success(
+            data: code,
+            title: Language == "ar" ? "تم إنشاء OTP" : "OTP Generated",
+            detail: Language == "ar" ? "تم إنشاء رمز OTP جديد وهو صالح لفترة محدودة." : "A new OTP code has been generated and is valid for a limited time."
+        );
     }
 
     /// <inheritdoc/>
@@ -69,15 +79,27 @@ public class OtpService : IOtpService
             .FirstOrDefaultAsync();
 
         if (record is null)
-            return ServiceResult<bool>.Failure("Invalid OTP", "The provided OTP code is invalid or has expired.", StatusCodes.Status400BadRequest);
+            return ServiceResult<bool>.Failure(
+                title: Language == "ar" ? "OTP غير صالح" : "Invalid OTP",
+                detail: Language == "ar" ? "رمز OTP المقدم غير صالح أو قد انتهى صلاحيته." : "The provided OTP code is invalid or has expired.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
 
         if (record.ExpiresAt < DateTimeOffset.UtcNow)
-            return ServiceResult<bool>.Failure("Expired OTP", "The provided OTP code has expired.", StatusCodes.Status400BadRequest);
+            return ServiceResult<bool>.Failure(
+                title: Language == "ar" ? "OTP منتهي الصلاحية" : "Expired OTP",
+                detail: Language == "ar" ? "رمز OTP المقدم قد انتهى صلاحيته." : "The provided OTP code has expired.",
+                statusCode: StatusCodes.Status400BadRequest
+            );
 
         record.IsConsumed = true;
         await _context.SaveChangesAsync();
 
-        return ServiceResult<bool>.Success(true, "OTP Valid", "The provided OTP code is valid.");
+        return ServiceResult<bool>.Success(
+            data: true,
+            title: Language == "ar" ? "OTP صالح" : "Valid OTP",
+            detail: Language == "ar" ? "رمز OTP المقدم صالح." : "The provided OTP code is valid."
+        );
     }
 
     // -------------------------------------------------------------------------
