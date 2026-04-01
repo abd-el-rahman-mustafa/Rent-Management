@@ -18,6 +18,7 @@ public static class DataSeeder
     {
         var roles = new List<AppRole>
         {
+            // Admin role with full permissions
             new AppRole
             {
                 Name        = Roles.Admin,
@@ -25,6 +26,14 @@ public static class DataSeeder
                 DescriptionEn = "Full access to all system features.",
                 DescriptionAr = "وصول كامل إلى جميع ميزات النظام."
             },
+            // User role with limited permissions
+            new AppRole
+            {
+                Name        = Roles.User,
+                NameAr      = "مستخدم",
+                DescriptionEn = "Access to basic features and functionalities.",
+                DescriptionAr = "الوصول إلى الميزات والوظائف الأساسية."
+            }
             // Other roles can be added here in the future, such as "Manager" or "Support"
             
         };
