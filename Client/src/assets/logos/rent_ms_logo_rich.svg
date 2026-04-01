@@ -1,0 +1,19 @@
+<svg width="100%" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    
+  <mask id="imagine-text-gaps-g4qevp" maskUnits="userSpaceOnUse"><rect x="0" y="0" width="680" height="220" fill="white"/><rect x="103.23400115966797" y="37.154273986816406" width="190.53729248046875" height="104.490478515625" fill="black" rx="2"/><rect x="293" y="37.154273986816406" width="119.5406494140625" height="104.490478515625" fill="black" rx="2"/><rect x="209.3538818359375" y="148.66648864746094" width="261.2921905517578" height="18.355782508850098" fill="black" rx="2"/></mask></defs>
+
+  <!-- "rent" -->
+  <text x="287" y="120" text-anchor="end" font-family="Georgia, serif" font-size="88" font-weight="700" letter-spacing="-3" style="fill:rgb(55, 138, 221);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, serif;font-size:88px;font-weight:700;text-anchor:end;dominant-baseline:auto">rent</text>
+
+  <!-- "ms" -->
+  <text x="297" y="120" text-anchor="start" font-family="Georgia, serif" font-size="88" font-weight="400" letter-spacing="-2" style="fill:rgb(29, 158, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:Georgia, serif;font-size:88px;font-weight:400;text-anchor:start;dominant-baseline:auto">ms</text>
+
+  <!-- Separator -->
+  <line x1="190" y1="138" x2="490" y2="138" stroke-width="0.5" mask="url(#imagine-text-gaps-g4qevp)" style="fill:rgb(0, 0, 0);stroke:rgb(68, 68, 65);color:rgb(255, 255, 255);stroke-width:0.5px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="190" cy="138" r="3" style="fill:rgb(55, 138, 221);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <circle cx="490" cy="138" r="3" style="fill:rgb(29, 158, 117);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+
+  <!-- Tagline -->
+  <text x="340" y="162" text-anchor="middle" font-family="'Trebuchet MS', sans-serif" font-size="12" letter-spacing="4" style="fill:rgb(180, 178, 169);stroke:none;color:rgb(255, 255, 255);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Trebuchet MS&quot;, sans-serif;font-size:12px;font-weight:400;text-anchor:middle;dominant-baseline:auto">PROPERTY RENTAL PLATFORM</text>
+</svg>
