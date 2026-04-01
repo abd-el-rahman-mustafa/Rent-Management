@@ -67,7 +67,69 @@ public static class DataSeeder
                 },
                 "Admin@1234",
                 Roles.Admin
-            )
+            ),
+            (
+                new AppUser
+                {
+                    UserName  = "user",
+                    Email     = "user@example.com",
+                    FirstName = "Regular",
+                    LastName  = "User",
+                    Gender    = Gender.Male,
+                    CreatedAt = now,
+                    UpdatedAt = now,
+                    IsActive  = true
+                },
+                "User@1234",
+                Roles.User
+
+            ),
+                (
+                    new AppUser
+                    {
+                        UserName  = "Samir",
+                        Email     = "Samir@example.com",
+                        FirstName = "Samir",
+                        LastName  = "Example",
+                        Gender    = Gender.Male,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        IsActive  = true
+                    },
+                    "Samir@1234",
+                    Roles.User
+                ),
+                (
+                    new AppUser
+                    {
+                        UserName  = "Sara",
+                        Email     = "Sara@example.com",
+                        FirstName = "Sara",
+                        LastName  = "Example",
+                        Gender    = Gender.Female,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        IsActive  = true
+                    },
+                    "Sara@1234",
+                    Roles.User
+                )
+                ,(
+                    new AppUser
+                    {
+                        UserName  = "Heba",
+                        Email     = "Heba@example.com",
+                        FirstName = "Heba",
+                        LastName  = "Example",
+                        Gender    = Gender.Female,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                        IsActive  = true
+                    },
+                    "Heba@1234",
+                    Roles.User
+                )
+
         };
         Console.WriteLine("Seeding users...");
         foreach (var (user, password, role) in seedUsers)
