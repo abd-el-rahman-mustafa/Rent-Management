@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @import 'ngx-toastr/toastr';
+
+@theme {
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-dm: 'DM Sans', sans-serif;
+}
