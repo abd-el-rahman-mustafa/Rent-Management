@@ -1,1 +1,37 @@
-<p>menu works!</p>
+<aside class="sidebar" [class.collapsed]="collapsed()">
+
+  <!-- logo -->
+  <div class="sidebar-logo">
+    <span class="logo-text" *ngIf="!collapsed()">
+      rent<span class="logo-accent">ms</span>
+    </span>
+    <span class="logo-icon" *ngIf="collapsed()">
+      <span class="logo-accent">r</span>
+    </span>
+  </div>
+
+  <!-- nav -->
+  <nav class="sidebar-nav">
+    @for (item of navItems; track item.route) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [title]="collapsed() ? item.label : ''"
+      >
+        <span class="nav-icon" [innerHTML]="item.icon"></span>
+        <span class="nav-label">{{ item.label }}</span>
+        <span class="nav-badge" *ngIf="item.badge">{{ item.badge }}</span>
+      </a>
+    }
+  </nav>
+
+  <!-- collapse toggle -->
+  <button class="collapse-btn" (click)="toggle()" [title]="collapsed() ? 'Expand' : 'Collapse'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path *ngIf="!collapsed()" d="M15 18l-6-6 6-6"/>
+      <path *ngIf="collapsed()"  d="M9 18l6-6-6-6"/>
+    </svg>
+  </button>
+
+</aside>
