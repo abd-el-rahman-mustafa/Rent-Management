@@ -29,7 +29,7 @@ export class Register extends BaseComponent implements OnInit, OnDestroy {
   /**
    *
    */
-    // Used in the brand panel footer
+  // Used in the brand panel footer
   readonly currentYear = signal(new Date().getFullYear());
   constructor() {
     super();
@@ -54,21 +54,20 @@ export class Register extends BaseComponent implements OnInit, OnDestroy {
       this.registerForm.get('lastName')?.valid &&
       this.registerForm.get('email')?.valid
     ) {
-      this.otpSent = true;
-
-      // Add required validators for OTP and password fields once OTP is sent
-      this.registerForm.get('emailOtpCode')?.setValidators([Validators.required, otpValidator]);
-      this.registerForm.get('emailOtpCode')?.updateValueAndValidity();
-      this.registerForm.get('password')?.setValidators([Validators.required, passwordValidator]);
-      this.registerForm.get('password')?.updateValueAndValidity();
-      this.registerForm.get('confirmPassword')?.setValidators([Validators.required, passwordValidator]);
-      this.registerForm.get('confirmPassword')?.updateValueAndValidity();
-
-      this.startCountdown();
-
       this.authService.sendOtp(this.registerForm.get('email')?.value).subscribe({
         next: (res: any) => {
-          this.toastr.success(res.message, 'Success');
+          this.toastr.success(res.detail, 'Success');
+          this.otpSent = true;
+
+          // Add required validators for OTP and password fields once OTP is sent
+          this.registerForm.get('emailOtpCode')?.setValidators([Validators.required, otpValidator]);
+          this.registerForm.get('emailOtpCode')?.updateValueAndValidity();
+          this.registerForm.get('password')?.setValidators([Validators.required, passwordValidator]);
+          this.registerForm.get('password')?.updateValueAndValidity();
+          this.registerForm.get('confirmPassword')?.setValidators([Validators.required, passwordValidator]);
+          this.registerForm.get('confirmPassword')?.updateValueAndValidity();
+
+          this.startCountdown();
         },
         error: (error) => {
           // this.toastr.error('An error occurred while sending OTP. Please try again.', 'Error');

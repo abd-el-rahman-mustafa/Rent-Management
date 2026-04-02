@@ -15,8 +15,8 @@ export class AuthService {
   http = inject(HttpClient);
 
 
-  sendOtp(email: string) {
-    return this.http.post(`${this.url}/send-email-otp`, { email });
+  sendOtp(email: string) : Observable<ApiResponse<boolean>>{
+    return this.http.post<ApiResponse<boolean>>(`${this.url}/send-email-otp`, { email });
   }
 
   register(registerDtor: RegisterDto) {
