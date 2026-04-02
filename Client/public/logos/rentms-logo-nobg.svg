@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 200" width="420" height="200">
+  <defs>
+    <style>
+      .logo-rent { font-family: Georgia, serif; font-size: 86px; font-weight: 700; fill: #0C447C; }
+      .logo-ms   { font-family: Georgia, serif; font-size: 86px; font-weight: 700; fill: #5DCAA5; }
+      .tagline   { font-family: 'Trebuchet MS', sans-serif; font-size: 11px; fill: #85B7EB; letter-spacing: 4px; }
+    </style>
+  </defs>
+
+  <!-- Wordmark centered -->
+  <text x="210" y="118" text-anchor="middle" class="logo-rent">rent<tspan class="logo-ms">ms</tspan></text>
+
+  <!-- Divider lines + tagline -->
+  <line x1="50"  y1="138" x2="145" y2="138" stroke="#85B7EB" stroke-width="0.6" opacity="0.5"/>
+  <line x1="275" y1="138" x2="370" y2="138" stroke="#85B7EB" stroke-width="0.6" opacity="0.5"/>
+
+  <text x="210" y="154" text-anchor="middle" class="tagline">PROPERTY RENTAL</text>
+  <text x="210" y="170" text-anchor="middle" class="tagline">PLATFORM</text>
+</svg>
