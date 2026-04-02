@@ -1,84 +1,197 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-md border border-gray-100">
-    <div>
-      <h2 class="mt-2 text-center text-3xl font-extrabold text-indigo-700">{{ lang() == 'en' ? 'Register' : 'تسجيل حساب جديد' }}</h2>
-      <p class="mt-2 text-center text-sm text-gray-600">{{ lang() == 'en' ? 'Create your new account' : 'أنشئ حسابك الجديد' }}</p>
+<div class="flex min-h-screen" [dir]="lang() == 'ar' ? 'rtl' : 'ltr'">
+
+  <!-- ── Left: Brand Panel ──────────────────────────────────────────────── -->
+  <div class="relative hidden lg:flex lg:flex-1 flex-col justify-between overflow-hidden bg-[#0C447C] px-12 py-10">
+
+    <!-- Decorative circles -->
+    <div class="pointer-events-none absolute -top-20 -right-20 h-80 w-80 rounded-full bg-[#85B7EB] opacity-[0.07]"></div>
+    <div class="pointer-events-none absolute bottom-32 right-10 h-48 w-48 rounded-full bg-[#5DCAA5] opacity-[0.07]"></div>
+    <div class="pointer-events-none absolute bottom-16 left-10 h-20 w-20 rounded-full bg-white opacity-[0.05]"></div>
+    <div class="pointer-events-none absolute inset-y-0 -right-16 w-28 -skew-x-[4deg] bg-[#185FA5] opacity-20"></div>
+
+    <!-- Brand content -->
+    <div class="relative z-10 flex flex-1 flex-col justify-center gap-12 text-center">
+
+      <div class="flex justify-center">
+        <img src="/logos/rentms-logo-nobg-white.svg" alt="rentms Logo" class="w-[75%]">
+      </div>
+
+      <!-- Hero text -->
+      <div class="text-center">
+        <h1 class="font-['Playfair_Display'] text-[clamp(22px,2.5vw,30px)] font-bold leading-snug text-white">
+          {{ lang() == 'en' ? 'Start your journey,' : 'ابدأ رحلتك،' }}<br>
+          <em class="not-italic text-[#5DCAA5]">{{ lang() == 'en' ? 'today.' : 'اليوم.' }}</em>
+        </h1>
+        <div class="flex justify-center">
+          <p class="mt-3 max-w-xs font-['DM_Sans'] text-sm leading-relaxed text-[#85B7EB]">
+            {{ lang() == 'en'
+              ? 'Join thousands who found their perfect home with rentms.'
+              : 'انضم إلى آلاف من وجدوا منزلهم المثالي مع rentms.' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="flex items-center justify-center gap-5">
+        <div class="flex flex-col gap-0.5">
+          <span class="font-['Playfair_Display'] text-xl font-bold text-white">2k+</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Properties' : 'عقار' }}</span>
+        </div>
+        <div class="h-9 w-px bg-[#85B7EB] opacity-30"></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="font-['Playfair_Display'] text-xl font-bold text-white">98%</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Satisfaction' : 'رضا العملاء' }}</span>
+        </div>
+        <div class="h-9 w-px bg-[#85B7EB] opacity-30"></div>
+        <div class="flex flex-col gap-0.5">
+          <span class="font-['Playfair_Display'] text-xl font-bold text-white">24/7</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Support' : 'دعم' }}</span>
+        </div>
+      </div>
+
     </div>
 
-    <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div class="space-y-4">
-        <div class="grid grid-cols-2 gap-4">
-          <div>
-            <app-input label="{{ lang() == 'en' ? 'First Name' : 'الاسم الأول' }}" type="text" formControlName="firstName">
-            </app-input>
-          </div>
+    <p class="relative z-10 font-['DM_Sans'] text-[11px] text-[#85B7EB] opacity-50">
+      &copy; {{ currentYear() }} rentms. All rights reserved.
+    </p>
+  </div>
 
-          <div>
-            <app-input label="{{ lang() == 'en' ? 'Last Name' : 'الاسم الأخير' }}" type="text" formControlName="lastName">
-            </app-input>
-          </div>
-        </div>
+  <!-- ── Right: Form Panel ──────────────────────────────────────────────── -->
+  <div class="flex flex-1 items-center justify-center bg-white px-6 py-12 lg:px-16">
+    <div class="w-full" style="max-width: 420px;">
 
+      <!-- Mobile-only logo -->
+      <div class="mb-8 lg:hidden text-center">
+        <span class="font-['Playfair_Display'] text-4xl font-bold text-[#0C447C]">rent</span><span
+          class="font-['Playfair_Display'] text-4xl font-normal text-[#085041]">ms</span>
+      </div>
+
+      @if (!otpSent) {
+
+      <!-- ── Register Form ── -->
+      <div class="flex flex-col gap-6">
         <div>
-          <app-input label="{{ lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني' }}" type="email" formControlName="email">
-          </app-input>
+          <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
+            {{ lang() == 'en' ? 'Create an account' : 'إنشاء حساب جديد' }}
+          </h2>
+          <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
+            {{ lang() == 'en' ? 'Join rentms and find your next home' : 'انضم إلى rentms وابحث عن منزلك القادم' }}
+          </p>
         </div>
 
-        @if(otpSent){
-        <div class="p-4 bg-gray-50 border rounded-lg space-y-4">
+        <form class="flex flex-col gap-4" [formGroup]="registerForm" (ngSubmit)="sendOtp()">
+          <div class="grid grid-cols-2 gap-4">
+            <app-input
+              [label]="lang() == 'en' ? 'First Name' : 'الاسم الأول'"
+              type="text"
+              formControlName="firstName">
+            </app-input>
+            <app-input
+              [label]="lang() == 'en' ? 'Last Name' : 'الاسم الأخير'"
+              type="text"
+              formControlName="lastName">
+            </app-input>
+          </div>
+
+          <app-input
+            [label]="lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني'"
+            type="email"
+            formControlName="email">
+          </app-input>
+
+          <button type="submit" [disabled]="registerForm.get('firstName')?.invalid || registerForm.get('lastName')?.invalid || registerForm.get('email')?.invalid"
+            class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#0C447C] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#185FA5] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
+            {{ lang() == 'en' ? 'Send OTP' : 'إرسال رمز التحقق' }}
+          </button>
+        </form>
+
+        <div class="flex items-center gap-3">
+          <div class="h-px flex-1 bg-gray-100"></div>
+          <span class="font-['DM_Sans'] text-xs text-gray-400">{{ lang() == 'en' ? 'or' : 'أو' }}</span>
+          <div class="h-px flex-1 bg-gray-100"></div>
+        </div>
+
+        <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
+          {{ lang() == 'en' ? 'Already have an account?' : 'هل لديك حساب بالفعل؟' }}
+          <a [routerLink]="['login']" class="font-medium text-[#085041] hover:underline">
+            {{ lang() == 'en' ? 'Sign In' : 'سجّل دخولك' }}
+          </a>
+        </p>
+      </div>
+
+      } @else {
+
+      <!-- ── OTP + Password Form ── -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
+            {{ lang() == 'en' ? 'Almost there!' : 'اقتربت من الهدف!' }}
+          </h2>
+          <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
+            {{ lang() == 'en'
+              ? 'Enter the code we sent to your email and set your password.'
+              : 'أدخل الرمز المرسل إلى بريدك وعيّن كلمة المرور.' }}
+          </p>
+        </div>
+
+        <form class="flex flex-col gap-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+          <!-- OTP row -->
           <div>
             <div class="flex justify-between items-center mb-1">
-              <label for="emailOtpCode" class="block text-sm font-medium text-gray-700">{{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }} <span
-                  class="text-red-500">*</span></label>
-              @if(otpCountdown > 0){
-
-              <span class="text-xs font-bold px-2 py-1 rounded-full" [ngClass]="
-                    otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-indigo-100 text-indigo-700'
-                    ">
+              <label class="font-['DM_Sans'] block text-xs font-medium uppercase tracking-wide text-gray-500">
+                {{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }}
+                <span class="text-red-500">*</span>
+              </label>
+              @if (otpCountdown > 0) {
+              <span class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full"
+                [ngClass]="otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-[#E6F1FB] text-[#0C447C]'">
                 {{ otpCountdown | countdown }}
               </span>
-              }@else {
+              } @else {
               <button type="button" (click)="sendOtp()"
-                class="text-xs font-bold px-2 py-1 rounded-full bg-indigo-100 text-indigo-500 cursor-pointer hover:text-indigo-700">
+                class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full bg-[#E6F1FB] text-[#185FA5] hover:text-[#0C447C] cursor-pointer transition-colors">
                 {{ lang() == 'en' ? 'Resend' : 'إعادة الإرسال' }}
               </button>
               }
             </div>
-            <app-input type="number" formControlName="emailOtpCode" [placeholder]="lang() == 'en' ? 'Enter the OTP sent to your email' : 'أدخل الرمز المرسل إلى بريدك الإلكتروني'">
+            <app-input
+              type="number"
+              formControlName="emailOtpCode"
+              [placeholder]="lang() == 'en' ? 'Enter the OTP sent to your email' : 'أدخل الرمز المرسل إلى بريدك'">
             </app-input>
           </div>
 
-          <div>
-            <app-input [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'" type="password" formControlName="password">
-            </app-input>
-          </div>
+          <app-input
+            [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'"
+            type="password"
+            formControlName="password">
+          </app-input>
 
-          <div>
-            <app-input [label]="lang() == 'en' ? 'Confirm Password' : 'تأكيد كلمة المرور'" type="password" formControlName="confirmPassword">
-            </app-input>
-          </div>
-        </div>
-        }
+          <app-input
+            [label]="lang() == 'en' ? 'Confirm Password' : 'تأكيد كلمة المرور'"
+            type="password"
+            formControlName="confirmPassword">
+          </app-input>
+
+          <button type="submit" [disabled]="registerForm.invalid || otpCountdown <= 0"
+            class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#085041] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#0F6E56] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
+            {{ otpCountdown <= 0
+              ? (lang() == 'en' ? 'OTP Expired' : 'انتهت صلاحية الرمز')
+              : (lang() == 'en' ? 'Complete Registration' : 'إتمام التسجيل') }}
+          </button>
+        </form>
+
+        <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
+          <button type="button" (click)="otpSent = false"
+            class="font-medium text-[#0C447C] hover:underline cursor-pointer">
+            {{ lang() == 'en' ? '← Back' : 'العودة ←' }}
+          </button>
+        </p>
       </div>
 
-      <div>
-        @if(otpSent){
-        <button type="submit" [disabled]="otpCountdown <= 0 || registerForm.invalid"
-          class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
-          {{ otpCountdown <= 0 ? 'OTP Expired' : 'Complete Registration' }} </button>
-            }@else {
-            <button type="button" (click)="sendOtp()"
-              class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-              {{ lang() == 'en' ? 'Send OTP' : 'إرسال رمز OTP' }}
-            </button>
-            }
-      </div>
-
-      <div class="text-center mt-4">
-        <a [routerLink]="['login']" class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-          {{ lang() == 'en' ? 'Already have an account? Log In' : 'هل لديك حساب بالفعل؟ سجل الدخول' }}
-        </a>
-      </div>
-    </form>
+      }
+    </div>
   </div>
+
 </div>

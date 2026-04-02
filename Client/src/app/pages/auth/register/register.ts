@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { FormInput } from '../../../shared/components/input/input';
@@ -29,6 +29,8 @@ export class Register extends BaseComponent implements OnInit, OnDestroy {
   /**
    *
    */
+    // Used in the brand panel footer
+  readonly currentYear = signal(new Date().getFullYear());
   constructor() {
     super();
   }
