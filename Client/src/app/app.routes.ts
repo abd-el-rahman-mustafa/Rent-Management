@@ -6,6 +6,7 @@ import { authGuard, notAuthGuard } from './core/guards/auth.guard';
 import { UsersLit } from './pages/user/users-lit/users-lit';
 import { langGuard } from './core/guards/lang.guard';
 import { redirectToLangGuard } from './core/guards/redirect-to-lang.guard';
+import { Layout } from './pages/layout/layout';
 
 
 export const routes: Routes = [
@@ -15,10 +16,21 @@ export const routes: Routes = [
     children: [
       { path: 'register', component: Register, canActivate: [notAuthGuard] },
       { path: 'login', component: Login, canActivate: [notAuthGuard] },
-      { path: '', component: MainPage, canActivate: [authGuard] },
+      // layouted routes
+      {
+        path: '', component: Layout, canActivate: [authGuard],
+        children: [
+          // main page
+          { path: 'dashboard', loadComponent: () => import('./pages/main-page/main-page').then(m => m.MainPage) },
 
-      // user routes
-      { path: 'users', component: UsersLit, canActivate: [authGuard] }
+          // users
+          { path: 'users', loadComponent: () => import('./pages/user/users-lit/users-lit').then(m => m.UsersLit) }
+
+        ]
+      },
+
+
+
     ]
   },
   {

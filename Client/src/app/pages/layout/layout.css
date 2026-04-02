@@ -1,0 +1,63 @@
+ /* ── tokens ────────────────────────────────────────────────────────────────── */
+ :root {
+     --sidebar-w: 260px;
+     --sidebar-collapsed-w: 72px;
+     --navbar-h: 64px;
+     --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+     --clr-navy: #0C447C;
+     --clr-green: #5DCAA5;
+     --clr-blue: #85B7EB;
+     --clr-bg: #F4F7FB;
+     --clr-surface: #FFFFFF;
+     --clr-border: #E2EAF4;
+     --clr-text: #1A2B3C;
+     --clr-muted: #7A91A8;
+ }
+
+ /* ── shell ──────────────────────────────────────────────────────────────────── */
+ .layout-wrapper {
+     display: flex;
+     height: 100vh;
+     background: var(--clr-bg);
+     overflow: hidden;
+
+     /* collapsed state — sidebar component shrinks itself,
+   main area just needs to adjust its margin */
+     &.sidebar-collapsed .layout-main {
+         margin-inline-start: var(--sidebar-collapsed-w);
+     }
+ }
+
+ /* ── right side (navbar + content) ─────────────────────────────────────────── */
+ .layout-main {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     margin-inline-start: var(--sidebar-w);
+     transition: margin-inline-start var(--transition);
+     min-width: 0;
+     /* prevent flex blowout */
+     overflow: hidden;
+ }
+
+ /* ── scrollable content area ────────────────────────────────────────────────── */
+ .layout-content {
+     flex: 1;
+     overflow-y: auto;
+     padding: 28px 32px;
+
+     /* subtle scrollbar */
+     &::-webkit-scrollbar {
+         width: 6px;
+     }
+
+     &::-webkit-scrollbar-track {
+         background: transparent;
+     }
+
+     &::-webkit-scrollbar-thumb {
+         background: var(--clr-border);
+         border-radius: 3px;
+     }
+ }

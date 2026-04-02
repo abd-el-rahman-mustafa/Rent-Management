@@ -1,37 +1,65 @@
-<aside class="sidebar" [class.collapsed]="collapsed()">
+<aside
+  class="fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0C447C] transition-all duration-300 overflow-hidden"
+  [class.w-64]="!collapsed()"
+  [class.w-[72px]]="collapsed()"
+>
 
-  <!-- logo -->
-  <div class="sidebar-logo">
-    <span class="logo-text" *ngIf="!collapsed()">
-      rent<span class="logo-accent">ms</span>
-    </span>
-    <span class="logo-icon" *ngIf="collapsed()">
-      <span class="logo-accent">r</span>
-    </span>
+  <!-- Logo -->
+  <div class="flex items-center h-16 border-b border-white/10 px-5 shrink-0"
+       [class.justify-center]="collapsed()">
+    @if (!collapsed()) {
+      <span class="font-serif text-2xl font-bold text-white whitespace-nowrap">
+        rent<span class="text-[#5DCAA5]">ms</span>
+      </span>
+    } @else {
+      <span class="font-serif text-2xl font-bold text-white">
+        <span class="text-[#5DCAA5]">r</span>
+      </span>
+    }
   </div>
 
-  <!-- nav -->
-  <nav class="sidebar-nav">
+  <!-- Nav -->
+  <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto">
     @for (item of navItems; track item.route) {
       <a
-        class="nav-item"
         [routerLink]="item.route"
-        routerLinkActive="active"
+        routerLinkActive="bg-[#5DCAA5] !text-[#0C447C] font-semibold"
+        class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 text-sm font-medium
+               hover:bg-white/10 hover:text-white transition-all duration-200 whitespace-nowrap"
+        [class.justify-center]="collapsed()"
+        [class.px-0]="collapsed()"
         [title]="collapsed() ? item.label : ''"
       >
-        <span class="nav-icon" [innerHTML]="item.icon"></span>
-        <span class="nav-label">{{ item.label }}</span>
-        <span class="nav-badge" *ngIf="item.badge">{{ item.badge }}</span>
+        <span class="w-5 h-5 shrink-0 flex items-center justify-center" [innerHTML]="item.icon"></span>
+
+        @if (!collapsed()) {
+          <span class="flex-1">{{ item.label }}</span>
+          @if (item.badge) {
+            <span class="bg-[#5DCAA5] text-[#0C447C] text-[11px] font-bold
+                         min-w-5 h-5 rounded-full flex items-center justify-center px-1.5">
+              {{ item.badge }}
+            </span>
+          }
+        }
       </a>
     }
   </nav>
 
-  <!-- collapse toggle -->
-  <button class="collapse-btn" (click)="toggle()" [title]="collapsed() ? 'Expand' : 'Collapse'">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path *ngIf="!collapsed()" d="M15 18l-6-6 6-6"/>
-      <path *ngIf="collapsed()"  d="M9 18l6-6-6-6"/>
-    </svg>
+  <!-- Collapse toggle -->
+  <button
+    (click)="toggle()"
+    class="m-3 p-2.5 rounded-xl bg-white/5 text-white/50 hover:bg-white/10
+           hover:text-white transition-all duration-200 flex items-center justify-center"
+  >
+    @if (!collapsed()) {
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+    } @else {
+      <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    }
   </button>
 
 </aside>

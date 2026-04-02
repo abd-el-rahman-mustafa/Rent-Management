@@ -5,6 +5,7 @@
   --font-playfair: 'Playfair Display', Georgia, serif;
   --font-dm: 'DM Sans', sans-serif;
 }
+@source inline("ml-64 ml-[72px] w-64 w-[72px]");
 
 body {
   font-family: 'DM Sans', sans-serif;
