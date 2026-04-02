@@ -4,13 +4,15 @@
   <div class="relative hidden lg:flex lg:flex-1 flex-col justify-between overflow-hidden bg-[#0C447C] px-12 py-10">
 
     <!-- Decorative circles -->
-    <div class="pointer-events-none absolute -top-20 -right-20 h-80 w-80 rounded-full bg-[#85B7EB] opacity-[0.07]"></div>
-    <div class="pointer-events-none absolute bottom-32 right-10 h-48 w-48 rounded-full bg-[#5DCAA5] opacity-[0.07]"></div>
+    <div class="pointer-events-none absolute -top-20 -right-20 h-80 w-80 rounded-full bg-[#85B7EB] opacity-[0.07]">
+    </div>
+    <div class="pointer-events-none absolute bottom-32 right-10 h-48 w-48 rounded-full bg-[#5DCAA5] opacity-[0.07]">
+    </div>
     <div class="pointer-events-none absolute bottom-16 left-10 h-20 w-20 rounded-full bg-white opacity-[0.05]"></div>
     <div class="pointer-events-none absolute inset-y-0 -right-16 w-28 -skew-x-[4deg] bg-[#185FA5] opacity-20"></div>
 
     <!-- Brand content -->
-    <div class="relative z-10 flex flex-1 flex-col justify-center gap-12">
+    <div class="relative z-10 flex flex-1 flex-col justify-center gap-12 text-center">
 
       <!-- Logo -->
       <!-- <div class="flex flex-col gap-2">
@@ -24,37 +26,44 @@
           <span class="h-px w-9 bg-[#5DCAA5] opacity-50"></span>
         </div>
       </div> -->
+      <div class="flex justify-center">
 
-       <img src="/logos/rentms-logo-nobg-white.svg" alt="rentms Logo" >
+        <img src="/logos/rentms-logo-nobg-white.svg" alt="rentms Logo" class="w-[75%]">
+      </div>
 
       <!-- Hero text -->
-      <div>
+      <div class="text-center">
         <h1 class="font-['Playfair_Display'] text-[clamp(22px,2.5vw,30px)] font-bold leading-snug text-white">
           {{ lang() == 'en' ? 'Find your next home,' : 'ابحث عن منزلك القادم،' }}<br>
           <em class="not-italic text-[#5DCAA5]">{{ lang() == 'en' ? 'effortlessly.' : 'بكل سهولة.' }}</em>
         </h1>
-        <p class="mt-3 max-w-xs font-['DM_Sans'] text-sm leading-relaxed text-[#85B7EB]">
-          {{ lang() == 'en'
+        <div class="flex justify-center">
+          <p class="mt-3 max-w-xs font-['DM_Sans'] text-sm leading-relaxed text-[#85B7EB]">
+            {{ lang() == 'en'
             ? 'Browse, apply, and manage rentals all in one place.'
             : 'تصفح وقدّم طلبك وأدر إيجاراتك في مكان واحد.' }}
-        </p>
+          </p>
+        </div>
       </div>
 
       <!-- Stats -->
-      <div class="flex items-center gap-5">
+      <div class="flex items-center justify-center gap-5">
         <div class="flex flex-col gap-0.5">
           <span class="font-['Playfair_Display'] text-xl font-bold text-white">2k+</span>
-          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Properties' : 'عقار' }}</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ?
+            'Properties' : 'عقار' }}</span>
         </div>
         <div class="h-9 w-px bg-[#85B7EB] opacity-30"></div>
         <div class="flex flex-col gap-0.5">
           <span class="font-['Playfair_Display'] text-xl font-bold text-white">98%</span>
-          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Satisfaction' : 'رضا العملاء' }}</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ?
+            'Satisfaction' : 'رضا العملاء' }}</span>
         </div>
         <div class="h-9 w-px bg-[#85B7EB] opacity-30"></div>
         <div class="flex flex-col gap-0.5">
           <span class="font-['Playfair_Display'] text-xl font-bold text-white">24/7</span>
-          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ? 'Support' : 'دعم' }}</span>
+          <span class="font-['DM_Sans'] text-[11px] uppercase tracking-wide text-[#85B7EB]">{{ lang() == 'en' ?
+            'Support' : 'دعم' }}</span>
         </div>
       </div>
 
@@ -77,111 +86,100 @@
 
       @if (!otpSent) {
 
-        <!-- ── Login Form ── -->
-        <div class="flex flex-col gap-6">
-          <div>
-            <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
-              {{ lang() == 'en' ? 'Welcome back' : 'مرحباً بعودتك' }}
-            </h2>
-            <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
-              {{ lang() == 'en' ? 'Sign in to your account to continue' : 'سجّل دخولك للمتابعة' }}
-            </p>
-          </div>
-
-          <form class="flex flex-col gap-4" [formGroup]="requestForm" (ngSubmit)="sendLoginRequest()">
-            <div>
-              <app-input
-                [label]="lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني'"
-                type="email"
-                formControlName="email">
-              </app-input>
-            </div>
-            <div>
-              <app-input
-                [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'"
-                type="password"
-                formControlName="password">
-              </app-input>
-            </div>
-
-            <button
-              type="submit"
-              [disabled]="requestForm.invalid"
-              class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#0C447C] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#185FA5] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
-              {{ lang() == 'en' ? 'Sign In' : 'تسجيل الدخول' }}
-            </button>
-          </form>
-
-          <div class="flex items-center gap-3">
-            <div class="h-px flex-1 bg-gray-100"></div>
-            <span class="font-['DM_Sans'] text-xs text-gray-400">{{ lang() == 'en' ? 'or' : 'أو' }}</span>
-            <div class="h-px flex-1 bg-gray-100"></div>
-          </div>
-
-          <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
-            {{ lang() == 'en' ? "Don't have an account?" : 'ليس لديك حساب؟' }}
-            <a [routerLink]="['register']" class="font-medium text-[#085041] hover:underline">
-              {{ lang() == 'en' ? 'Sign Up' : 'سجّل الآن' }}
-            </a>
+      <!-- ── Login Form ── -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
+            {{ lang() == 'en' ? 'Welcome back' : 'مرحباً بعودتك' }}
+          </h2>
+          <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
+            {{ lang() == 'en' ? 'Sign in to your account to continue' : 'سجّل دخولك للمتابعة' }}
           </p>
         </div>
+
+        <form class="flex flex-col gap-4" [formGroup]="requestForm" (ngSubmit)="sendLoginRequest()">
+          <div>
+            <app-input [label]="lang() == 'en' ? 'Email Address' : 'عنوان البريد الإلكتروني'" type="email"
+              formControlName="email">
+            </app-input>
+          </div>
+          <div>
+            <app-input [label]="lang() == 'en' ? 'Password' : 'كلمة المرور'" type="password" formControlName="password">
+            </app-input>
+          </div>
+
+          <button type="submit" [disabled]="requestForm.invalid"
+            class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#0C447C] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#185FA5] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
+            {{ lang() == 'en' ? 'Sign In' : 'تسجيل الدخول' }}
+          </button>
+        </form>
+
+        <div class="flex items-center gap-3">
+          <div class="h-px flex-1 bg-gray-100"></div>
+          <span class="font-['DM_Sans'] text-xs text-gray-400">{{ lang() == 'en' ? 'or' : 'أو' }}</span>
+          <div class="h-px flex-1 bg-gray-100"></div>
+        </div>
+
+        <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
+          {{ lang() == 'en' ? "Don't have an account?" : 'ليس لديك حساب؟' }}
+          <a [routerLink]="['register']" class="font-medium text-[#085041] hover:underline">
+            {{ lang() == 'en' ? 'Sign Up' : 'سجّل الآن' }}
+          </a>
+        </p>
+      </div>
 
       } @else {
 
-        <!-- ── OTP Form ── -->
-        <div class="flex flex-col gap-6">
-          <div>
-            <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
-              {{ lang() == 'en' ? 'Check your email' : 'تحقق من بريدك' }}
-            </h2>
-            <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
-              {{ lang() == 'en'
-                ? 'We sent a one-time code to your email address.'
-                : 'أرسلنا رمزاً مؤقتاً إلى بريدك الإلكتروني.' }}
-            </p>
-          </div>
-
-          <form class="flex flex-col gap-4" [formGroup]="otpLoginForm" (ngSubmit)="verifyOtp()">
-            <div>
-              <div class="flex justify-between items-center mb-1">
-                <label class="font-['DM_Sans'] block text-xs font-medium uppercase tracking-wide text-gray-500">
-                  {{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }}
-                  <span class="text-red-500">*</span>
-                </label>
-                @if (otpCountdown > 0) {
-                  <span class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full"
-                    [ngClass]="otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-[#E6F1FB] text-[#0C447C]'">
-                    {{ otpCountdown | countdown }}
-                  </span>
-                } @else {
-                  <button type="button" (click)="reSendOtp()"
-                    class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full bg-[#E6F1FB] text-[#185FA5] hover:text-[#0C447C] cursor-pointer transition-colors">
-                    {{ lang() == 'en' ? 'Resend' : 'إعادة الإرسال' }}
-                  </button>
-                }
-              </div>
-              <app-input
-                type="number"
-                formControlName="otp"
-                [placeholder]="lang() == 'en' ? 'Enter the OTP' : 'ادخل الرمز المرسل إلى بريدك'">
-              </app-input>
-            </div>
-
-            <button
-              type="submit"
-              [disabled]="otpLoginForm.invalid"
-              class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#085041] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#0F6E56] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
-              {{ lang() == 'en' ? 'Verify' : 'تحقق' }}
-            </button>
-          </form>
-
-          <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
-            <button type="button" (click)="otpSent = false"
-              class="font-medium text-[#0C447C] hover:underline cursor-pointer">
-              {{ lang() == 'en' ? '← Back to login' : 'العودة لتسجيل الدخول ←' }}
-            </button>
+      <!-- ── OTP Form ── -->
+      <div class="flex flex-col gap-6">
+        <div>
+          <h2 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">
+            {{ lang() == 'en' ? 'Check your email' : 'تحقق من بريدك' }}
+          </h2>
+          <p class="mt-1 font-['DM_Sans'] text-sm text-gray-500">
+            {{ lang() == 'en'
+            ? 'We sent a one-time code to your email address.'
+            : 'أرسلنا رمزاً مؤقتاً إلى بريدك الإلكتروني.' }}
           </p>
         </div>
+
+        <form class="flex flex-col gap-4" [formGroup]="otpLoginForm" (ngSubmit)="verifyOtp()">
+          <div>
+            <div class="flex justify-between items-center mb-1">
+              <label class="font-['DM_Sans'] block text-xs font-medium uppercase tracking-wide text-gray-500">
+                {{ lang() == 'en' ? 'OTP Code' : 'رمز OTP' }}
+                <span class="text-red-500">*</span>
+              </label>
+              @if (otpCountdown > 0) {
+              <span class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full"
+                [ngClass]="otpCountdown <= 30 ? 'bg-red-100 text-red-700' : 'bg-[#E6F1FB] text-[#0C447C]'">
+                {{ otpCountdown | countdown }}
+              </span>
+              } @else {
+              <button type="button" (click)="reSendOtp()"
+                class="font-['DM_Sans'] text-xs font-bold px-2 py-1 rounded-full bg-[#E6F1FB] text-[#185FA5] hover:text-[#0C447C] cursor-pointer transition-colors">
+                {{ lang() == 'en' ? 'Resend' : 'إعادة الإرسال' }}
+              </button>
+              }
+            </div>
+            <app-input type="number" formControlName="otp"
+              [placeholder]="lang() == 'en' ? 'Enter the OTP' : 'ادخل الرمز المرسل إلى بريدك'">
+            </app-input>
+          </div>
+
+          <button type="submit" [disabled]="otpLoginForm.invalid"
+            class="mt-2 w-full flex justify-center items-center py-3 px-4 rounded-lg bg-[#085041] font-['DM_Sans'] text-sm font-medium tracking-wide text-white transition-colors hover:bg-[#0F6E56] active:scale-[0.99] disabled:bg-gray-300 disabled:cursor-not-allowed">
+            {{ lang() == 'en' ? 'Verify' : 'تحقق' }}
+          </button>
+        </form>
+
+        <p class="text-center font-['DM_Sans'] text-sm text-gray-500">
+          <button type="button" (click)="otpSent = false"
+            class="font-medium text-[#0C447C] hover:underline cursor-pointer">
+            {{ lang() == 'en' ? '← Back to login' : 'العودة لتسجيل الدخول ←' }}
+          </button>
+        </p>
+      </div>
 
       }
     </div>
