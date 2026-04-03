@@ -1,11 +1,17 @@
 // directives/lang-router-link.directive.ts
-import { Directive, Input, inject } from '@angular/core';
+import { Directive, Input, inject, forwardRef } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { LanguageService } from '../services/language.service';
 
 @Directive({
   selector: '[routerLink]', // override the default RouterLink
   standalone: true,
+  providers: [
+    {
+      provide: RouterLink,
+      useExisting: forwardRef(() => LangRouterLinkDirective),
+    },
+  ],
 })
 export class LangRouterLinkDirective extends RouterLink {
   private languageService = inject(LanguageService);
