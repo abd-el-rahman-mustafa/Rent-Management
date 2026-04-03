@@ -44,4 +44,9 @@ export class LanguageService {
     const newUrl = currentUrl.replace(/^\/(ar|en)/, `/${lang}`);
     this.router.navigateByUrl(newUrl);
   }
+
+  toggleLang() {
+    const newLang = this.lang() === 'en' ? 'ar' : 'en';
+    this.setLang(newLang);
+  }
 }

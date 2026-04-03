@@ -5,6 +5,7 @@ import { filter, map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { LanguageService } from '../../core/services/language.service'; // adjust path as needed
 import { BaseComponent } from '../../core/components/base-component/base-component';
+import { LanguageBtn } from "../../shared/components/language-btn/language-btn";
 
 const ROUTE_TITLES: Record<string, string> = {
   '/dashboard':  'Dashboard',
@@ -19,7 +20,7 @@ const ROUTE_TITLES: Record<string, string> = {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LanguageBtn],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -41,7 +42,4 @@ export class NavbarComponent extends BaseComponent {
     return matched ? ROUTE_TITLES[matched] : 'rent ms';
   });
 
-  toggleLang(): void {
-    // this.langService.toggleLang();
-  }
 }

@@ -13,4 +13,8 @@ export class BaseComponent {
 
   lang = this.langService.lang;
 
+  toggleLang = () => this.langService.toggleLang();
+
+
+
 }
