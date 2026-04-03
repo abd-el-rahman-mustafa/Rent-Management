@@ -1,8 +1,5 @@
- <!-- Language toggle -->
-    <button
-      (click)="toggleLang()"
-      class="h-8 px-3.5 border border-slate-200 rounded-lg text-[#0C447C] text-xs font-bold
-             tracking-wide hover:bg-slate-50 hover:border-[#85B7EB] transition-all duration-200"
-    >
-      {{ lang() === 'en' ? 'AR' : 'EN' }}
-    </button>
+<!-- Language toggle -->
+<button (click)="toggleLang()" class="h-8 px-3.5 border border-slate-200 rounded-lg text-[#0C447C] text-xs font-bold
+             tracking-wide hover:bg-slate-50 hover:border-[#85B7EB] transition-all duration-200 cursor-pointer">
+  {{ lang() === 'en' ? 'AR' : 'EN' }}
+</button>
