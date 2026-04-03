@@ -24,38 +24,48 @@ export class MenuComponent extends BaseComponent {
  
   navItems: NavItem[] = [
     {
-      label: 'Dashboard',
+      label: this.lang()== 'en'? 'Dashboard' : 'لوحة التحكم',
       route: '/dashboard',
       icon: 'fa-solid fa-table-cells-large',
     },
     {
-      label: 'Properties',
+      label: this.lang()== 'en'? 'Users' : 'المستخدمين',
+      route: '/users',
+      icon: 'fa-solid fa-users',
+    },
+    {
+      label: this.lang()== 'en'? 'Owners' : 'المستأجرين',
+      route: '/owners',
+      icon: 'fa-solid fa-user-tie',
+    },
+    {
+      label: this.lang()== 'en'? 'Properties' : 'العقارات'  ,
       route: '/properties',
       icon: 'fa-solid fa-building',
     },
     {
-      label: 'Tenants',
+      label: this.lang()== 'en'? 'Tenants' : 'الملاك'  ,
       route: '/tenants',
       icon: 'fa-solid fa-users',
       badge: 3,
     },
     {
-      label: 'Contracts',
+      label: this.lang()== 'en'? 'Contracts' : 'العقود',
       route: '/contracts',
       icon: 'fa-solid fa-file-signature',
     },
     {
-      label: 'Payments',
+      label: this.lang()== 'en'? 'Payments' : 'المدفوعات',
       route: '/payments',
       icon: 'fa-regular fa-credit-card',
     },
     {
-      label: 'Reports',
+      label: this.lang()== 'en'? 'Reports' : 'التقارير',
       route: '/reports',
       icon: 'fa-solid fa-chart-column',
     },
     {
-      label: 'Settings',
+      label: this.lang()== 'en'? 'Settings' : 'الإعدادات',
       route: '/settings',
       icon: 'fa-solid fa-gear',
     },

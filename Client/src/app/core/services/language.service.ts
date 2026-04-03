@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
@@ -17,13 +17,11 @@ export class LanguageService {
    */
   constructor() {
     this.syncLang(defaultLang);
-
   }
 
   lang = signal<Lang>(
-    (isPlatformBrowser(this.platformId)
-      ? localStorage.getItem('lang') as Lang
-      : null) ?? defaultLang
+    (isPlatformBrowser(this.platformId) ? (localStorage.getItem('lang') as Lang) : null) ??
+      defaultLang,
   );
 
   /** Syncs lang signal + DOM only — no navigation. Used by the lang guard. */
@@ -42,11 +40,16 @@ export class LanguageService {
     this.syncLang(lang);
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace(/^\/(ar|en)/, `/${lang}`);
-    this.router.navigateByUrl(newUrl);
+    return this.router.navigateByUrl(newUrl);
   }
 
   toggleLang() {
-    const newLang = this.lang() === 'en' ? 'ar' : 'en';
-    this.setLang(newLang);
+    if (isPlatformBrowser(this.platformId)) {
+      const newLang = this.lang() === 'en' ? 'ar' : 'en';
+      this.setLang(newLang).then(() => {
+        // reload the page to apply the new language settings cleanly
+        location.reload();
+      });
+    }
   }
 }
