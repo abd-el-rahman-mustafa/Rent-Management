@@ -7,6 +7,8 @@ import { LanguageService } from '../../core/services/language.service'; // adjus
 import { BaseComponent } from '../../core/components/base-component/base-component';
 import { LanguageBtn } from "../../shared/components/language-btn/language-btn";
 
+import { UserMenuComponent } from '../../shared/components/user-menu/user-menu';
+
 const ROUTE_TITLES: Record<string, string> = {
   '/dashboard':  'Dashboard',
   '/properties': 'Properties',
@@ -20,7 +22,7 @@ const ROUTE_TITLES: Record<string, string> = {
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, LanguageBtn],
+  imports: [CommonModule, LanguageBtn, UserMenuComponent],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
