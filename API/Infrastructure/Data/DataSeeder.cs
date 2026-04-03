@@ -63,7 +63,8 @@ public static class DataSeeder
                     Gender    = Gender.Male,
                     CreatedAt = now,
                     UpdatedAt = now,
-                    IsActive  = true
+                    IsActive  = true,
+                    EmailConfirmed = true
                 },
                 "Admin@1234",
                 Roles.Admin
