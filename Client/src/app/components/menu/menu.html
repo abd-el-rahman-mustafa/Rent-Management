@@ -1,5 +1,5 @@
-<aside class="fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0C447C] transition-all duration-300 overflow-hidden"
-  [class.w-64]="!collapsed()" [class.w-[72px]]="collapsed()">
+<aside class="fixed inset-y-0 start-0 z-50 flex flex-col bg-[#0C447C] transition-all duration-300 overflow-hidden"
+  [class.w-55]="!collapsed()" [class.w-[72px]]="collapsed()">
 
   <!-- Logo -->
   <div class="flex items-center h-16 border-b border-white/10 px-5 shrink-0" [class.justify-center]="collapsed()">
@@ -15,7 +15,7 @@
   </div>
 
   <!-- Nav -->
-  <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto">
+  <nav class="flex-1 flex flex-col gap-1 p-3 overflow-y-auto overflow-hidden">
     @for (item of navItems; track item.route) {
     <a [routerLink]="item.route" routerLinkActive="bg-[#5DCAA5] !text-[#0C447C] font-semibold" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 text-sm font-medium
                hover:bg-white/10 hover:text-white transition-all duration-200 whitespace-nowrap"
@@ -40,11 +40,11 @@
   <button (click)="toggle()" class="m-3 p-2.5 rounded-xl bg-white/5 text-white/50 hover:bg-white/10
            hover:text-white transition-all duration-200 flex items-center justify-center">
     @if (!collapsed()) {
-    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="w-5 h-5 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M15 18l-6-6 6-6" />
     </svg>
     } @else {
-    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <svg class="w-5 h-5 rtl:-scale-x-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M9 18l6-6-6-6" />
     </svg>
     }
