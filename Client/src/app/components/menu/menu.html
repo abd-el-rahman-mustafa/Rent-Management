@@ -20,8 +20,9 @@
     <a [routerLink]="item.route" routerLinkActive="bg-[#5DCAA5] !text-[#0C447C] font-semibold" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 text-sm font-medium
                hover:bg-white/10 hover:text-white transition-all duration-200 whitespace-nowrap"
       [class.justify-center]="collapsed()" [class.px-0]="collapsed()" [title]="collapsed() ? item.label : ''">
-      <span class="w-5 h-5 shrink-0 flex items-center justify-center" ></span>
-{{ item.icon }}
+      <span class="w-5 h-5 shrink-0 flex items-center justify-center text-lg">
+        <i [class]="item.icon"></i>
+      </span>
       @if (!collapsed()) {
       <span class="flex-1">{{ item.label }}</span>
       @if (item.badge) {
