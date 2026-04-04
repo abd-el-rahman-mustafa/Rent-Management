@@ -3,7 +3,7 @@
   <button (click)="toggleMenu()"
     class="w-9 h-9 rounded-full bg-[#0C447C] text-white text-xs font-bold
               flex items-center justify-center cursor-pointer hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#5DCAA5] focus:ring-offset-2">
-    AE
+    {{ user?.fullName?.substring(0, 2) || 'NA' }}
   </button>
 
   <!-- Dropdown Menu -->
@@ -16,8 +16,8 @@
     class="absolute top-full mt-2 end-0 w-56 bg-white rounded-xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-slate-100 py-1 z-50 origin-top-right transition-all transform opacity-100 scale-100">
 
     <div class="px-4 py-3 border-b border-slate-100">
-      <p class="text-sm font-semibold text-slate-800">Abd El-Rahman</p>
-      <p class="text-xs text-slate-500 truncate mt-0.5">admin@rent-ms.com</p>
+      <p class="text-sm font-semibold text-slate-800">{{ user?.fullName }}</p>
+      <p class="text-xs text-slate-500 truncate mt-0.5">{{ user?.email }}</p>
     </div>
 
     <div class="py-1.5">

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseComponent } from '../../../core/components/base-component/base-component';
 import { AuthService } from '../../../pages/auth/auth.service';
@@ -12,6 +12,7 @@ import { AuthService } from '../../../pages/auth/auth.service';
 export class UserMenuComponent extends BaseComponent {
   // isOpen is a signal that controls the visibility of the user menu
   isOpen = signal(false);
+
 
   private authService = inject(AuthService);
 
