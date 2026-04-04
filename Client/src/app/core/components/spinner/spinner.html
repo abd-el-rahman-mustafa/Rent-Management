@@ -1,12 +1,20 @@
 @if (loadingService.isLoading()) {
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm">
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
 
-  <div class="flex flex-col items-center gap-4">
+  <div class="flex flex-col items-center gap-5">
 
-    <div class="h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent"></div>
+    <!-- Dual-ring spinner -->
+    <div class="relative h-14 w-14">
+      <!-- Outer ring (slow) -->
+      <div class="absolute inset-0 rounded-full border-4 border-white/20"></div>
+      <!-- Inner animated ring -->
+      <div
+        class="absolute inset-0 animate-spin rounded-full border-4 border-transparent border-t-white border-r-white/50"
+        style="animation-duration: 700ms;"></div>
+    </div>
 
-    <p class="text-white text-sm font-medium">
-      Loading...
+    <p class="text-white text-sm font-medium tracking-wide drop-shadow">
+      {{ lang() === 'en' ? 'Loading...' : 'جار التحميل...' }}
     </p>
 
   </div>
