@@ -17,3 +17,9 @@ export interface LoginOtpDto {
     otp: string;
 }
 
+export interface UserTokenData {
+    id: number;
+    fullName: string;
+    email: string;
+    roles: string;
+}

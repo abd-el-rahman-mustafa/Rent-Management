@@ -31,7 +31,6 @@ export class Login extends BaseComponent {
 
   toastr = inject(ToastrService);
   router = inject(Router);
-  tokenService = inject(TokenService);
 
   constructor(
     private authService: AuthService,
@@ -87,7 +86,8 @@ export class Login extends BaseComponent {
       this.authService.emailOtpLogin(otpDto).subscribe({
         next: (response) => {
           this.toastr.success(response.detail, response.title);
-          this.tokenService.setToken(response.data);
+          console.log( response.detail);
+          this.tokenService.handleToken(response.data);
           this.router.navigate(['/']);
         },
       });
