@@ -5,6 +5,7 @@ import { environment } from '../../../env/env.dev';
 import { LoginDto, LoginOtpDto, RegisterDto } from './auth.interface';
 import { ApiResponse, AuthToken } from '../../core/interfaces/api.interface';
 import { Observable } from 'rxjs';
+import { LanguageService } from '../../core/services/language.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +14,7 @@ export class AuthService {
 
   url = environment.API_URL + 'auth';
   http = inject(HttpClient);
-
+  languageService = inject(LanguageService);
 
   sendOtp(email: string) : Observable<ApiResponse<boolean>>{
     return this.http.post<ApiResponse<boolean>>(`${this.url}/send-email-otp`, { email });
@@ -38,12 +39,12 @@ export class AuthService {
   logout() {
     // Just remove the token from localStorage, the app will react to this change and update the UI accordingly (e.g., show login/register buttons instead of user info)
     localStorage.removeItem('token');
-    localStorage.removeItem('decodedToken');
+    localStorage.removeItem('user');
 
     //TODO: route to the home page after logout
     // window.location.href = '/';
     // router to login page after logout
-    window.location.href = '/login';
+    window.location.href = `${this.languageService.lang()}/login`;
   }
 
 
