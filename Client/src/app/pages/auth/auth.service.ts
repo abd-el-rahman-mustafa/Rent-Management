@@ -30,5 +30,21 @@ export class AuthService {
     return this.http.post<ApiResponse<AuthToken>>(`${this.url}/email-otp-login`, otpDto);
   }
 
+    getDecodedAccessToken(accessToken: string) {
+      // atob is a built-in function that decodes a base64-encoded string
+    return JSON.parse(atob(accessToken.split('.')[1]));
+  }
+
+  logout() {
+    // Just remove the token from localStorage, the app will react to this change and update the UI accordingly (e.g., show login/register buttons instead of user info)
+    localStorage.removeItem('token');
+    localStorage.removeItem('decodedToken');
+
+    //TODO: route to the home page after logout
+    // window.location.href = '/';
+    // router to login page after logout
+    window.location.href = '/login';
+  }
+
 
 }

@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseComponent } from '../../../core/components/base-component/base-component';
+import { AuthService } from '../../../pages/auth/auth.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -12,6 +13,8 @@ export class UserMenuComponent extends BaseComponent {
   // isOpen is a signal that controls the visibility of the user menu
   isOpen = signal(false);
 
+  private authService = inject(AuthService);
+
   toggleMenu() {
     // toggle the visibility of the user menu
     this.isOpen.update((v) => !v);
@@ -19,7 +22,6 @@ export class UserMenuComponent extends BaseComponent {
 
   logout() {
     this.isOpen.set(false);
-    // TODO: Implement actual logout logic through an auth service
-    console.log('User logged out');
+    this.authService.logout();
   }
 }
