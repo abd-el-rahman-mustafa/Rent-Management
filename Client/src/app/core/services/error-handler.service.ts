@@ -46,7 +46,7 @@ export class ErrorHandlerService {
                 this.router.navigate(['/forbidden']);
                 break;
             case 404:
-                this.router.navigate(['/not-found']);
+                 this.toastr.error(error.detail, error.title);
                 break;
             case 400:
                 this.normalizeValidationErrors(error);
