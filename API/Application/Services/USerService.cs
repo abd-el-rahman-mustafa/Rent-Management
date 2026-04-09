@@ -21,12 +21,16 @@ public class UserService : IUserService
     }
     public async Task<List<simpleUserInfoDto>> GetUsersAsync()
     {
-        var users = await _userManager.Users.Select(u => new simpleUserInfoDto
+        var users = await _context.Users.Select(u => new simpleUserInfoDto
         {
             Id = u.Id,
             FirstName = u.FirstName,
             LastName = u.LastName,
             Email = u.Email,
+            EmailConfirmed = u.EmailConfirmed,
+            PhoneNumber = u.PhoneNumber,
+            PhoneNumberConfirmed = u.PhoneNumberConfirmed,
+            IsActive = u.IsActive
         }).ToListAsync();
 
         return users;

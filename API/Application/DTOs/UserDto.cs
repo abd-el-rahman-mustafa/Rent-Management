@@ -6,5 +6,9 @@ public class simpleUserInfoDto
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string? Phone { get; set; }
+    public bool EmailConfirmed { get; set; }
+    public string? PhoneNumber { get; set; }
+    public bool PhoneNumberConfirmed { get; set; }
+   public bool IsActive { get; set; } = true;
 }
+
