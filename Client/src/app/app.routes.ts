@@ -22,7 +22,12 @@ export const routes: Routes = [
           { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
 
           // users
-          { path: 'users', loadComponent: () => import('./pages/user/users-list/users-lit').then(m => m.UsersList) }
+          {
+            path: 'users', loadComponent: () => import('./pages/user/users-list/users-lit').then(m => m.UsersList),
+            children: [
+              { path: ':id', loadComponent: () => import('./pages/user/user-profile/user-profile').then(m => m.UserProfile) }
+            ]
+          }
 
         ]
       },

@@ -17,7 +17,22 @@ export interface User {
     gender: Gender;
 }
 
-
+export interface SimpleUserInfo {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+}
+export interface UpdateUserDto {
+  firstName:   string;
+  lastName:    string;
+  email:       string;
+  phone?:      string;
+  gender?:     Gender;
+  dateOfBirth?: string;  // ISO date string "YYYY-MM-DD"
+  active?:     boolean;
+}
 export enum Gender
 {
     NotSpecified,

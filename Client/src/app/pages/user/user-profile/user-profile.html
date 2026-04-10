@@ -1,1 +1,296 @@
-<p>user-profile works!</p>
+<div class="p-6 flex flex-col gap-6">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="font-['Playfair_Display'] text-2xl font-bold text-[#0C447C]">User Profile</h1>
+      <p class="mt-0.5 font-['DM_Sans'] text-sm text-gray-400">View and manage user information</p>
+    </div>
+
+    <!-- Mode toggle -->
+    <div class="flex items-center gap-1 bg-gray-100 p-1 rounded-xl">
+      <button (click)="setMode('preview')"
+        class="font-['DM_Sans'] text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-200"
+        [class.bg-white]="mode === 'preview'"
+        [class.text-[#0C447C]]="mode === 'preview'"
+        [class.shadow-sm]="mode === 'preview'"
+        [class.text-gray-400]="mode !== 'preview'">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Preview
+        </span>
+      </button>
+      <button (click)="setMode('edit')"
+        class="font-['DM_Sans'] text-xs font-semibold px-4 py-2 rounded-lg transition-all duration-200"
+        [class.bg-white]="mode === 'edit'"
+        [class.text-[#0C447C]]="mode === 'edit'"
+        [class.shadow-sm]="mode === 'edit'"
+        [class.text-gray-400]="mode !== 'edit'">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Edit
+        </span>
+      </button>
+    </div>
+  </div>
+
+  @if (isLoading) {
+  <!-- Loading skeleton -->
+  <div class="rounded-2xl border border-gray-100 bg-white shadow-sm p-8 flex flex-col gap-6 animate-pulse">
+    <div class="flex items-center gap-5">
+      <div class="w-20 h-20 rounded-full bg-gray-100"></div>
+      <div class="flex flex-col gap-2">
+        <div class="h-5 w-40 bg-gray-100 rounded-lg"></div>
+        <div class="h-3.5 w-28 bg-gray-100 rounded-lg"></div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      @for (i of [1,2,3,4,5,6]; track i) {
+      <div class="h-12 bg-gray-100 rounded-xl"></div>
+      }
+    </div>
+  </div>
+  } @else if (user) {
+
+  <!-- ── PREVIEW MODE ── -->
+  @if (mode === 'preview') {
+  <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+
+    <!-- Profile banner -->
+    <div class="h-24 bg-[#0C447C] relative overflow-hidden">
+      <div class="pointer-events-none absolute -top-8 -right-8 h-32 w-32 rounded-full bg-[#85B7EB] opacity-[0.1]"></div>
+      <div class="pointer-events-none absolute bottom-0 left-16 h-16 w-16 rounded-full bg-[#5DCAA5] opacity-[0.1]"></div>
+      <div class="pointer-events-none absolute inset-y-0 -right-8 w-16 -skew-x-[4deg] bg-[#185FA5] opacity-20"></div>
+    </div>
+
+    <div class="px-8 pb-8">
+      <!-- Avatar row -->
+      <div class="flex items-end justify-between -mt-10 mb-6">
+        <div class="w-20 h-20 rounded-2xl bg-[#0C447C] border-4 border-white shadow-md flex items-center justify-center">
+          <span class="font-['Playfair_Display'] text-2xl font-bold text-white">
+            {{ user.firstName?.charAt(0)?.toUpperCase() }}{{ user.lastName?.charAt(0)?.toUpperCase() }}
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 mb-1">
+          @if (user.active) {
+          <span class="inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-semibold px-2.5 py-1 rounded-full bg-[#E6F7F3] text-[#085041]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#5DCAA5]"></span>Active
+          </span>
+          } @else {
+          <span class="inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-semibold px-2.5 py-1 rounded-full bg-gray-100 text-gray-400">
+            <span class="w-1.5 h-1.5 rounded-full bg-gray-300"></span>Inactive
+          </span>
+          }
+          @if (user.emailVerified) {
+          <span class="inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-semibold px-2.5 py-1 rounded-full bg-[#E6F1FB] text-[#0C447C]">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Verified
+          </span>
+          } @else {
+          <span class="inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-600">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Unverified
+          </span>
+          }
+        </div>
+      </div>
+
+      <!-- Name -->
+      <div class="mb-6">
+        <h2 class="font-['Playfair_Display'] text-xl font-bold text-[#0C447C]">
+          {{ user.firstName }} {{ user.lastName }}
+        </h2>
+        <p class="font-['DM_Sans'] text-sm text-gray-400 mt-0.5">{{ user.email }}</p>
+      </div>
+
+      <!-- Info grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">First Name</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800">{{ user.firstName || '—' }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">Last Name</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800">{{ user.lastName || '—' }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">Email</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800">{{ user.email || '—' }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">Phone</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800">{{ user.phone || '—' }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">Gender</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800 capitalize">{{ user.gender || '—' }}</span>
+        </div>
+
+        <div class="flex flex-col gap-1 p-4 rounded-xl bg-gray-50 border border-gray-100">
+          <span class="font-['DM_Sans'] text-[10px] font-semibold uppercase tracking-widest text-gray-400">Date of Birth</span>
+          <span class="font-['DM_Sans'] text-sm font-medium text-gray-800">{{ user.dateOfBirth ? (user.dateOfBirth | date:'mediumDate') : '—' }}</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- ── EDIT MODE ── -->
+  @if (mode === 'edit') {
+  <div class="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+
+    <!-- Edit header strip -->
+    <div class="px-8 py-5 border-b border-gray-100 flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#0C447C] flex items-center justify-center shrink-0">
+        <span class="font-['Playfair_Display'] text-base font-bold text-white">
+          {{ profileForm.get('firstName')?.value?.charAt(0)?.toUpperCase() }}{{ profileForm.get('lastName')?.value?.charAt(0)?.toUpperCase() }}
+        </span>
+      </div>
+      <div>
+        <p class="font-['Playfair_Display'] text-base font-bold text-[#0C447C]">
+          {{ profileForm.get('firstName')?.value }} {{ profileForm.get('lastName')?.value }}
+        </p>
+        <p class="font-['DM_Sans'] text-xs text-gray-400">Editing profile</p>
+      </div>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="p-8 flex flex-col gap-6">
+
+      <!-- Name row -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+            First Name <span class="text-red-400">*</span>
+          </label>
+          <input formControlName="firstName" type="text" placeholder="First name"
+            class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all placeholder:text-gray-300" />
+          @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+          <p class="font-['DM_Sans'] text-xs text-red-400">First name is required.</p>
+          }
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+            Last Name <span class="text-red-400">*</span>
+          </label>
+          <input formControlName="lastName" type="text" placeholder="Last name"
+            class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all placeholder:text-gray-300" />
+          @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+          <p class="font-['DM_Sans'] text-xs text-red-400">Last name is required.</p>
+          }
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+          Email Address <span class="text-red-400">*</span>
+        </label>
+        <input formControlName="email" type="email" placeholder="email@example.com"
+          class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all placeholder:text-gray-300" />
+        @if (profileForm.get('email')?.invalid && profileForm.get('email')?.touched) {
+        <p class="font-['DM_Sans'] text-xs text-red-400">A valid email is required.</p>
+        }
+      </div>
+
+      <!-- Phone + Gender -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="flex flex-col gap-1.5">
+          <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">Phone</label>
+          <input formControlName="phone" type="tel" placeholder="+1 234 567 890"
+            class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all placeholder:text-gray-300" />
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">Gender</label>
+          <select formControlName="gender"
+            class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all appearance-none cursor-pointer">
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="flex flex-col gap-1.5">
+        <label class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">Date of Birth</label>
+        <input formControlName="dateOfBirth" type="date"
+          class="w-full font-['DM_Sans'] text-sm text-gray-800 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#0C447C] focus:bg-white focus:ring-2 focus:ring-[#0C447C]/10 transition-all" />
+      </div>
+
+      <!-- Status toggles -->
+      <div class="flex flex-col gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+        <p class="font-['DM_Sans'] text-[11px] font-semibold uppercase tracking-widest text-gray-400">Account Flags</p>
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="font-['DM_Sans'] text-sm font-medium text-gray-700">Active</p>
+            <p class="font-['DM_Sans'] text-xs text-gray-400">Allow this user to access the system</p>
+          </div>
+          <button type="button" (click)="toggleActive()"
+            class="relative w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none"
+            [class.bg-[#5DCAA5]]="profileForm.get('active')?.value"
+            [class.bg-gray-200]="!profileForm.get('active')?.value">
+            <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-200"
+              [class.translate-x-5]="profileForm.get('active')?.value"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="h-px bg-gray-100"></div>
+
+      <!-- Actions -->
+      <div class="flex items-center justify-between">
+        <button type="button" (click)="setMode('preview')"
+          class="font-['DM_Sans'] text-sm font-medium text-gray-400 hover:text-gray-600 transition-colors px-4 py-2.5 rounded-xl hover:bg-gray-50">
+          Cancel
+        </button>
+
+        <div class="flex items-center gap-3">
+          @if (saveSuccess) {
+          <span class="inline-flex items-center gap-1.5 font-['DM_Sans'] text-xs font-semibold px-3 py-1.5 rounded-full bg-[#E6F7F3] text-[#085041]">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Saved!
+          </span>
+          }
+          <button type="submit" [disabled]="profileForm.invalid || isSaving"
+            class="font-['DM_Sans'] text-sm font-semibold px-6 py-2.5 rounded-xl bg-[#0C447C] text-white hover:bg-[#185FA5] active:scale-[0.99] disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2">
+            @if (isSaving) {
+            <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" opacity=".25"/>
+              <path d="M21 12a9 9 0 00-9-9" stroke-linecap="round"/>
+            </svg>
+            Saving...
+            } @else {
+            Save Changes
+            }
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+  }
+
+  }
+</div>

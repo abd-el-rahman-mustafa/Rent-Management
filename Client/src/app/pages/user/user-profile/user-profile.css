@@ -1,0 +1,5 @@
+/* Native date/select inputs — keep consistent with system style */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: pointer;
+}
